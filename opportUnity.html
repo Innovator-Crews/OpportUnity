@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background:url("hp.jpg");
+            background-size:cover;
+        }
+        *{
+            margin:0px;
+            padding:0%;
+        }
+        li{
+            text-decoration:none;
+            color:blue;
+        }
+        div{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        button{
+            width: 250px;
+            height: 40px;
+            border-radius:5px;
+            transition:0.5s;
+            border:2px solid white;
+            cursor:pointer;
+        }
+        #container
+        {
+            display: flex;
+            justify-content: space-evenly;
+            height: 100vh;
+            width:100%;
+        }
+        h1{
+            margin-top: 20px;
+            color:gold;
+        }
+    </style>
+</head>
+<body>
+    <div style="height: 100vh;">
+        <h1>OpportUnity</h1>
+        <div id="container">
+            <a href="opportUnity_signup.php"><button>sign up</button></a>
+            <a href="opportUnity_login.php"><button>login</button></a>
+        </div>
+        
+    </div>
+    
+    
+    <script>    
+        // const xhr = new XMLHttpRequest();
+        // const container = document.getElementById('container');
+
+        // function clickme()
+        // {
+            
+        // xhr.onload = function()
+        // {
+        //     if(this.status === 200)
+        //     {
+        //         container.innerHTML = xhr.responseText;
+        //     }
+        // }
+        // xhr.open('get', 'opportUnity_signup.php');
+        // xhr.send();
+        // }
+    </script>
+</body>
+</html>
