@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Account</title>
+
+    <link rel="stylesheet" href="opportUnity_login.css">
+
+    <link rel="icon" type="image/png" href="faviconlogo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <!-- Nav bar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <img src="logo.png" alt="OpportUnity Logo" class="navbar-logo">
+            <div class="logo">OpportUnity</div>
+            <ul class="nav-links">
+                <li><a href="#">Landing Page</a></li>
+                <li><a href="#">Terms & Condition</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Starting -->
+    <div class="container">
+        <div class="signup-container">
+            <p>Welcome, OpportUnity is waiting!</p>
+            <h2>Access your Account</h2>
+
+            <div class="login-link">
+                <p>No account yet? <a href="opportUnity_signup.html">Register now</a></p>
+            </div>
+
+            <!-- Form -->
+            <form method="POST">
+                <div class="input-group">
+                    <input type="email" name="email" id="email" placeholder=" " required>
+                    <label for="email">Email</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" name="password" id="password" placeholder=" " required>
+                    <label for="password">Password</label>
+                </div>
+
+                <!-- Finale -->
+                 <div class="terms">
+                    <p>
+                        Error text sample.
+                        <br><a href="#">Forgot Password?</a>.
+                    </p>
+                 </div>
+                
+                <button type="submit" class="btn">Sign in</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
