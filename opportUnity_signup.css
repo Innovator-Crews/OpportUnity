@@ -182,7 +182,7 @@ input {
     font-style: normal;
 }
 
-label {
+.input-box {
     position: absolute;
     top: 50%;
     left: 20px;
@@ -193,8 +193,8 @@ label {
     pointer-events: none;
 }
 
-input:focus + label,
-input:not(:placeholder-shown) + label {
+input:focus + .input-box,
+input:not(:placeholder-shown) + .input-box {
     top: 0px;
     left: 18px;
     padding: 0px 5px;

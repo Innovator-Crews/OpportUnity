@@ -42,27 +42,38 @@
                 <div class="name-fields">
                     <div class="input-group">
                         <input type="text" name="first_name" id="first_name" placeholder=" " required>
-                        <label for="first_name">First name</label>
+                        <label class="input-box" for="first_name">First name</label>
                     </div>
                     <div class="input-group">
                         <input type="text" name="last_name" id="last_name" placeholder=" " required>
-                        <label for="last_name">Last name</label>
+                        <label class="input-box" for="last_name">Last name</label>
+                    </div>
+                </div>
+
+                <div class="name-fields">
+                    <div>
+                        <input type="radio" id="employer">
+                        <label for="employer">Employer</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="employee">
+                        <label for="employee">Employee</label>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <input type="email" name="email" id="email" placeholder=" " required>
-                    <label for="email">Email</label>
+                    <label class="input-box" for="email">Email</label>
                 </div>
 
                 <div class="input-group">
                     <input type="password" name="password" id="password" placeholder=" " required>
-                    <label for="password">Password</label>
+                    <label class="input-box" for="password">Password</label>
                 </div>
 
                 <div class="input-group">
                     <input type="password" name="confirm_password" id="confirm_password" placeholder=" " required>
-                    <label for="confirm_password">Confirm Password</label>
+                    <label class="input-box" for="confirm_password">Confirm Password</label>
                 </div>
 
                 <!-- Finale -->
