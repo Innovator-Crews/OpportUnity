@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account</title>
+    <title>Create Account - OpportUnity</title>
 
     <link rel="stylesheet" href="opportUnity_signup.css">
 
@@ -18,10 +18,10 @@
     <!-- Nav bar -->
     <nav class="navbar">
         <div class="navbar-left">
-            <img src="logo.png" alt="OpportUnity Logo" class="navbar-logo">
-            <div class="logo">OpportUnity</div>
+            <a href="opportUnity.html"><img src="logo.png" alt="OpportUnity Logo" class="navbar-logo"></a>
+            <a href="opportUnity.html"><div class="logo">OpportUnity</div></a>
             <ul class="nav-links">
-                <li><a href="#">Landing Page</a></li>
+                <li><a href="opportUnity.html">Landing Page</a></li>
                 <li><a href="#">Terms & Condition</a></li>
             </ul>
         </div>
@@ -37,8 +37,21 @@
                 <p>Already have an account? <a href="opportUnity_login.html">Login</a></p>
             </div>
 
+            <div class="user-role">
+                <p>Select your role:</p>
+                <div class="radio-option">
+                    <input type="radio" name="role" id="employee" value="employee" required>
+                    <label for="employee">Employee</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="role" id="employer" value="employer" required>
+                    <label for="employer">Employer</label>
+                </div>
+            </div>
+
             <!-- Form -->
             <form method="POST">
+
                 <div class="name-fields">
                     <div class="input-group">
                         <input type="text" name="first_name" id="first_name" placeholder=" " required>
