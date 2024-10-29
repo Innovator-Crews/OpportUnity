@@ -56,6 +56,10 @@ body {
     cursor: pointer;
 }
 
+.navbar-left a {
+    text-decoration: none;
+}
+
 .nav-links {
     list-style: none;
     display: flex;
@@ -90,7 +94,7 @@ body {
     padding: 20px;
     background-color: white;
     border-radius: 20px;
-    margin-left: 1%;
+    margin-left: 2%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -173,6 +177,11 @@ input {
     font-family: "Spectral", serif;
     font-weight: 600;
     font-style: normal;
+}
+
+input:focus{
+    border: 2px solid rgba(0, 0, 150, 0.849);
+    box-shadow: 0 0 5px rgba(0, 0, 150, 0.5);
 }
 
 label {
