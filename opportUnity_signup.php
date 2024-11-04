@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account</title>
+    <title>Create Account - OpportUnity</title>
 
     <link rel="stylesheet" href="opportUnity_signup.css">
 
@@ -18,10 +18,10 @@
     <!-- Nav bar -->
     <nav class="navbar">
         <div class="navbar-left">
-            <img src="logo.png" alt="OpportUnity Logo" class="navbar-logo">
-            <div class="logo">OpportUnity</div>
+            <a href="opportUnity.html"><img src="logo.png" alt="OpportUnity Logo" class="navbar-logo"></a>
+            <a href="opportUnity.html"><div class="logo">OpportUnity</div></a>
             <ul class="nav-links">
-                <li><a href="#">Landing Page</a></li>
+                <li><a href="opportUnity.html">Landing Page</a></li>
                 <li><a href="#">Terms & Condition</a></li>
             </ul>
         </div>
@@ -37,43 +37,45 @@
                 <p>Already have an account? <a href="opportUnity_login.php">Login</a></p>
             </div>
 
+            
+
             <!-- Form -->
             <form method="POST">
+                <div class="user-role">
+                    <p>Select your role:</p>
+                    <div class="radio-option">
+                        <input type="radio" name="role" id="employee" value="employee" required>
+                        <p for="employee">Employee</p>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="role" id="employer" value="employer" required>
+                        <p for="employer">Employer</p>
+                    </div>
+                </div>
                 <div class="name-fields">
                     <div class="input-group">
                         <input type="text" name="first_name" id="first_name" placeholder=" " required>
-                        <label class="input-box" for="first_name">First name</label>
+                        <label for="first_name">First name</label>
                     </div>
                     <div class="input-group">
                         <input type="text" name="last_name" id="last_name" placeholder=" " required>
-                        <label class="input-box" for="last_name">Last name</label>
-                    </div>
-                </div>
-
-                <div class="name-fields">
-                    <div>
-                        <input type="radio" id="employer">
-                        <label for="employer">Employer</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="employee">
-                        <label for="employee">Employee</label>
+                        <label for="last_name">Last name</label>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <input type="email" name="email" id="email" placeholder=" " required>
-                    <label class="input-box" for="email">Email</label>
+                    <label for="email">Email</label>
                 </div>
 
                 <div class="input-group">
                     <input type="password" name="password" id="password" placeholder=" " required>
-                    <label class="input-box" for="password">Password</label>
+                    <label for="password">Password</label>
                 </div>
 
                 <div class="input-group">
                     <input type="password" name="confirm_password" id="confirm_password" placeholder=" " required>
-                    <label class="input-box" for="confirm_password">Confirm Password</label>
+                    <label for="confirm_password">Confirm Password</label>
                 </div>
 
                 <!-- Finale -->
@@ -98,8 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastname = $_POST['last_name'];
     $username = $_POST['email'];
     $password = $_POST['password'];
+    $role = $_POST['role'];
     //                                      $image = addslashes(file_get_contents($_FILES['pic']['tmp_name']));
-    $sex = $_POST['gender'];
+    // $sex = $_POST['gender'];
     $user_id;
 
     $conn = new mysqli("localhost", "root", "", "opportunity");
@@ -122,11 +125,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else{
             //$sql = "INSERT INTO user(user_ID, user_fullname, user_username, user_password, profile_photo) VALUES ('$user_id', '$fullname', '$username', '$password', '$image')";
             //$sql = "INSERT INTO user(user_ID, user_fullname, user_username, user_password, user_sex) VALUES ('$user_id', '$fullname', '$username', '$password', '$sex')";
-            $sql = "INSERT INTO user(user_ID, user_firstname, user_lastname, user_username, user_password) VALUES ('$user_id', '$firstname', '$lastname', '$username', '$password')";
+            $sql = "INSERT INTO user(user_ID, user_type, user_firstname, user_lastname, user_username, user_password) VALUES ('$user_id', '$role', '$firstname', '$lastname', '$username', '$password')";
             $result = mysqli_query($conn, $sql);
 
             if ($result) {
-                echo "User registered successfully!";
+                echo "<script>alert('Account created');</script>";
             } else {
                 echo "Error: " . mysqli_error($conn);
             }

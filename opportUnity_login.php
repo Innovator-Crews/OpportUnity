@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login to Account</title>
+    <title>Login to Account - OpportUnity</title>
 
     <link rel="stylesheet" href="opportUnity_login.css">
 
@@ -18,10 +18,10 @@
     <!-- Nav bar -->
     <nav class="navbar">
         <div class="navbar-left">
-            <img src="logo.png" alt="OpportUnity Logo" class="navbar-logo">
-            <div class="logo">OpportUnity</div>
+            <a href="opportUnity.html"><img src="logo.png" alt="OpportUnity Logo" class="navbar-logo"></a>
+            <a href="opportUnity.html"><div class="logo">OpportUnity</div></a>
             <ul class="nav-links">
-                <li><a href="#">Landing Page</a></li>
+                <li><a href="opportUnity.html">Landing Page</a></li>
                 <li><a href="#">Terms & Condition</a></li>
             </ul>
         </div>
@@ -34,11 +34,11 @@
             <h2>Access your Account</h2>
 
             <div class="login-link">
-                <p>No account yet? <a href="opportUnity_signup.html">Register now</a></p>
+                <p>No account yet? <a href="opportUnity_signup.php">Register now</a></p>
             </div>
 
             <!-- Form -->
-            <form action="http://localhost/trylangpangwebhost/opportUnity_mainpage.php" id="myForm" method="POST">
+            <form action="http://localhost/trylangpangwebhost/opportUnity_mainpage.php" method="POST">
                 <div class="input-group">
                     <input type="email" name="email" id="email" placeholder=" " required>
                     <label for="email">Email</label>
@@ -57,11 +57,10 @@
                     </p>
                  </div>
                 
-                <button type="button" class="btn" onclick="submitForm()">Sign in</button>
+                <button type="submit" class="btn">Sign in</button>
             </form>
         </div>
     </div>
-
 
 </body>
 </html>
