@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,24 +35,24 @@
             <h2>Create Account</h2>
 
             <div class="login-link">
-                <p>Already have an account? <a href="opportUnity_login.php">Login</a></p>
+                <p>Already have an account? <a href="opportUnity_login.html">Login</a></p>
             </div>
 
-            
+            <div class="user-role">
+                <p>Select your role:</p>
+                <div class="radio-option">
+                    <input type="radio" name="role" id="employee" value="employee" required>
+                    <label for="employee">Employee</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="role" id="employer" value="employer" required>
+                    <label for="employer">Employer</label>
+                </div>
+            </div>
 
             <!-- Form -->
             <form method="POST">
-                <div class="user-role">
-                    <p>Select your role:</p>
-                    <div class="radio-option">
-                        <input type="radio" name="role" id="employee" value="employee" required>
-                        <p for="employee">Employee</p>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" name="role" id="employer" value="employer" required>
-                        <p for="employer">Employer</p>
-                    </div>
-                </div>
+
                 <div class="name-fields">
                     <div class="input-group">
                         <input type="text" name="first_name" id="first_name" placeholder=" " required>
@@ -92,6 +93,7 @@
 
 </body>
 </html>
+
 <?php
 
 
@@ -130,6 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($result) {
                 echo "<script>alert('Account created');</script>";
+                echo "<script>window.location.replace('opportUnity_login.php');</script>";
             } else {
                 echo "Error: " . mysqli_error($conn);
             }
