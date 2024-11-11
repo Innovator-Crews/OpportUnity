@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Information - OpportUnity</title>
+    <link rel="stylesheet" href="opportUnity_addinfo.css"> 
+    <link rel="icon" type="image/png" href="faviconlogo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Nav bar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="opportUnity.html"><img src="logo.png" alt="OpportUnity Logo" class="navbar-logo"></a>
+            <a href="opportUnity.html"><div class="logo">OpportUnity</div></a>
+            <ul class="nav-links">
+                <li><a href="opportUnity.html">Landing Page</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Additional Info Form -->
+    <div class="container">
+        <div class="signup-container">
+            <p>Complete Your Profile for Better Opportunities!</p>
+            <h2>Additional Information</h2>
+
+            <!-- Form -->
+            <form method="POST" onsubmit="saveAdditionalInfo(event)">
+                <div class="name-fields">
+                    <div class="input-group">
+                        <select name="gender" id="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="gender">Gender</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" name="age" id="age" min="18" placeholder=" " required>
+                        <label for="age">Age</label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="date" name="birthday" id="birthday" placeholder=" " required>
+                    <label for="birthday">Birthday</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="address" id="address" placeholder=" " required>
+                    <label for="address">Address</label>
+                </div>
+
+                <!-- Skills and Certifications -->
+                <div class="input-group">
+                    <textarea name="skills" id="skills" rows="3" placeholder=" "></textarea>
+                    <label for="skills">Skills and Certifications</label>
+                </div>
+
+                <!-- Previous Work Experience -->
+                <div class="input-group">
+                    <textarea name="experience" id="experience" rows="4" placeholder=" "></textarea>
+                    <label for="experience">Previous Work Experience</label>
+                </div>
+
+                <!-- Professional Summary -->
+                <div class="input-group">
+                    <textarea name="summary" id="summary" rows="3" placeholder=" "></textarea>
+                    <label for="summary">Professional Summary</label>
+                </div>
+
+                <!-- Preferred Job Location and Availability -->
+                <div class="name-fields">
+                    <div class="input-group">
+                        <select name="location" id="location" required>
+                            <option value="" disabled selected>Select Preferred Job Location</option>
+                            <option value="remote">Remote</option>
+                            <option value="on-site">On-site</option>
+                            <option value="hybrid">Hybrid</option>
+                        </select>
+                        <label for="location">Job Location</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" name="availability" id="availability" placeholder=" ">
+                        <label for="availability">Availability</label>
+                    </div>
+                </div>
+
+                <!-- Portfolio or Project Links -->
+                <div class="input-group">
+                    <input type="url" name="portfolio" id="portfolio" placeholder=" ">
+                    <label for="portfolio">Portfolio or Project Links</label>
+                </div>
+
+                <!-- Languages Spoken -->
+                <div class="input-group">
+                    <input type="text" name="languages" id="languages" placeholder=" ">
+                    <label for="languages">Languages Spoken</label>
+                </div>
+
+                <!-- Social Media Links -->
+                <div class="input-group">
+                    <input type="url" name="linkedin" id="linkedin" placeholder=" ">
+                    <label for="linkedin">LinkedIn Profile</label>
+                </div>
+                <div class="input-group">
+                    <input type="url" name="social_media" id="social_media" placeholder=" ">
+                    <label for="social_media">Other Social Media Links</label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn">Save and Continue</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript to handle form submission -->
+    <script>
+        function saveAdditionalInfo(event) {
+            event.preventDefault();
+            alert("Additional information saved successfully!");
+            window.location.href = "opportUnity_login.html"; // Redirect to login page
+        }
+    </script>
+</body>
+</html>

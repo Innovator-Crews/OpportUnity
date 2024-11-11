@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - OpportUnity</title>
+    <link rel="stylesheet" href="opportUnity_signup.css">
+    <link rel="icon" type="image/png" href="faviconlogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Nav bar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="opportUnity.html"><img src="logo.png" alt="OpportUnity Logo" class="navbar-logo"></a>
+            <a href="opportUnity.html"><div class="logo">OpportUnity</div></a>
+            <ul class="nav-links">
+                <li><a href="opportUnity.html">Landing Page</a></li>
+                <li><a href="#">Terms & Condition</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Signup Form -->
+    <div class="container">
+        <div class="signup-container">
+            <p>Grab Opportunity with us!</p>
+            <h2>Create Account</h2>
+            <div class="login-link">
+                <p>Already have an account? <a href="opportUnity_login.html">Sign in</a></p>
+            </div>
+        
+            <form method="POST" action="signup.php">
+                <div class="name-fields">
+                    <div class="input-group">
+                        <input type="text" name="first_name" id="first_name" placeholder=" " required>
+                        <label for="first_name">First name</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" name="last_name" id="last_name" placeholder=" " required>
+                        <label for="last_name">Last name</label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" id="email" placeholder=" " required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" id="password" placeholder=" " required>
+                    <label for="password">Password</label>
+                    <button type="button" class="show-password-btn" onclick="togglePasswordVisibility('password', this)">Show</button>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" name="confirm_password" id="confirm_password" placeholder=" " required>
+                    <label for="confirm_password">Confirm Password</label>
+                    <button type="button" class="show-password-btn" onclick="togglePasswordVisibility('confirm_password', this)">Show</button>
+                </div>
+
+                <!-- Role Selection -->
+                <div class="role-selection">
+                    <button type="button" id="employee-btn" class="role-btn" onclick="selectRole('employee')">Job Seeker</button>
+                    <button type="button" id="employer-btn" class="role-btn" onclick="selectRole('employer')">Employer</button>
+                </div>
+
+                <!-- Hidden input for selected role -->
+                <input type="hidden" name="role" id="selected_role" value="">
+
+                <button type="submit" id="submit-btn" class="btn">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle role selection and button highlighting
+        function selectRole(role) {
+            const employeeBtn = document.getElementById("employee-btn");
+            const employerBtn = document.getElementById("employer-btn");
+            const selectedRoleInput = document.getElementById("selected_role");
+
+            // Toggle active class and set the selected role
+            if (role === "employee") {
+                employeeBtn.classList.add("active");
+                employerBtn.classList.remove("active");
+            } else if (role === "employer") {
+                employerBtn.classList.add("active");
+                employeeBtn.classList.remove("active");
+            }
+
+            // Set the selected role in the hidden input
+            selectedRoleInput.value = role;
+        }
+
+        // Function to toggle password visibility
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                button.textContent = "Hide";
+            } else {
+                input.type = "password";
+                button.textContent = "Show";
+            }
+        }
+
+        // Password validation on confirm password input
+        document.getElementById("confirm_password").addEventListener("input", function () {
+            const password = document.getElementById("password").value;
+            const confirmPassword = this.value;
+
+            if (confirmPassword && password !== confirmPassword) {
+                this.setCustomValidity("Passwords do not match");
+            } else {
+                this.setCustomValidity("");
+            }
+        });
+    </script>
+</body>
+</html>
