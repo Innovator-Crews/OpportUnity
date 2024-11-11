@@ -6,6 +6,7 @@
     $first = '';
     $last = '';
     $pic = '';
+    $submitted = 0;
 
     $conn = new mysqli("localhost", "root", "", "opportunity");
 $sql = "SELECT * FROM user WHERE user_username=? AND user_password=?";
@@ -54,7 +55,7 @@ if (isset($_POST['makejobjob_title'])) {
         $stmt->bind_param("isssi", $jobID, $compname, $jobpos, $jobdes, $userID);
 
         if ($stmt->execute()) {
-            echo "<p id='success'>User registered successfully!</p>";
+            echo $submitted = 1;
         } else {
             echo "Error: " . $stmt->error;
         }
@@ -145,15 +146,29 @@ if (isset($_POST['makejobjob_title'])) {
                 <textarea id="expectations" name="expectations" rows="3" required></textarea>
             </div>
 
-            <button onclick="submit()" class="submit-btn">Post Job</button>
+            
+    <input type="hidden" id="userID" name="userID" value="<?= $userID ?>">
+    <input type="hidden" id="uname" name="email" value="<?= $userNAME ?>">
+    <input type="hidden" id="pword" name="password" value="<?= $userPASSWORD ?>">
+
+            <button name="makejobjob_title" class="submit-btn">Post Job</button>
         </form>
+
+        <form id="submitcompleted" action="opportUnity_dashboard_employer.php" method="POST" enctype="multipart/form-data">
+    <input type="hidden" id="userID" name="userID" value="<?= $userID ?>">
+    <input type="hidden" id="email" name="email" value="<?= $userNAME ?>">
+    <input type="hidden" id="password" name="password" value="<?= $userPASSWORD ?>">
+</form>
     </div>
 
 <script>
-    function submit()
+    var submitted = <?php echo $submitted; ?>;
+    while(submitted == 1)
     {
-        document.getElementById('success').submit();
+        document.getElementById('submitcompleted').submit();
+        break;
     }
+
 </script>
 </body>
 </html>
