@@ -24,7 +24,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #333;
+    background-color: #293241;
     display: flex;
     justify-content: flex-start;
     padding: 15px 30px;
@@ -53,7 +53,16 @@ body {
     font-size: 24px;
     font-weight: bold;
     margin-right: 30px; /* space sa opportunity and links */
+    transition: color 0.5s;
     cursor: pointer;
+}
+
+.navbar .logo:hover {
+    color: #98c1d9;
+}
+
+.navbar-left a {
+    text-decoration: none;
 }
 
 .nav-links {
@@ -67,11 +76,11 @@ body {
     text-decoration: none;
     color: white;
     font-size: 18px;
-    transition: color 0.3s;
+    transition: color 0.5s;
 }
 
 .nav-links li a:hover {
-    color: lightblue;
+    color: #98c1d9;
 }
 
 
@@ -86,12 +95,36 @@ body {
 .signup-container {
     height: auto;
     min-width: 300px;
-    width: 30%;
+    width: 35%;
     padding: 20px;
     background-color: white;
     border-radius: 20px;
-    margin-left: 1%;
+    margin-left: 2%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive if ganto size */
+@media (max-width: 768px) {
+    .signup-container {
+        width: 80%; /* size ng container */
+        margin: auto;
+    }
+
+    .role-btn {
+        flex: 1 1 100%; /* table approach 1 1 */
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .signup-container {
+        width: 90%; /* size ng container */
+        padding: 15px; 
+    }
+
+    h2, p, .login-link p, .login-link a, .terms p, .terms a, .btn {
+        font-size: 2vh; /* font size lahat */
+    }
 }
 
 .signup-container p {
@@ -129,7 +162,7 @@ body {
 }
 
 .login-link a {
-    color: rgba(0, 0, 150, 0.849);
+    color: #3d5a90;
     text-decoration: none;
     font-family: "Spectral", serif;
     font-weight: 400;
@@ -137,16 +170,17 @@ body {
     font-size: 2.5vh;
     letter-spacing: 1px;
     font-weight: 600;
-    transition: background-color 0.5s;
+    transition: background-color 1s ease-in-out, margin-left 1s ease-in-out, padding 1s ease-in-out;
     padding: 3px 10px;
     border-radius: 20px;
 }
 
 .login-link a:hover{
+    margin-left: 10px;
     color: white;
-    background-color: rgb(56, 56, 180);
+    background-color: #3d5a90;
+    padding: 3px 30px;
 }
-
 
 form {
     display: flex;
@@ -175,6 +209,11 @@ input {
     font-style: normal;
 }
 
+input:focus{
+    border: 2px solid rgba(0, 0, 150, 0.849);
+    box-shadow: 0 0 5px rgba(0, 0, 150, 0.5);
+}
+
 label {
     position: absolute;
     top: 50%;
@@ -197,47 +236,47 @@ input:not(:placeholder-shown) + label {
     letter-spacing: 1px;
 }
 
-
-.terms {
-    text-align: center;
-}
-
-.terms p {
-    font-family: "Spectral", serif;
-    font-weight: 700;
-    font-style: normal;
-    color: red;
-    font-size: 2.25vh;
+form input:hover + label,
+input:not(:placeholder-shown) + label {
+    top: 0px;
+    left: 18px;
+    padding: 0px 5px;
+    border-radius: -5px;
+    background-color: white;
+    font-size: 12px;
+    color: black;
     letter-spacing: 1px;
 }
 
-.terms a {
-    color: blue;
-    text-decoration: none;
-    text-align: center;
-    font-family: "Spectral", serif;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 1.75vh;
-    letter-spacing: 1px;
-    transition: background-color 0.5s;
-    padding: 2px 6px;
-    border-radius: 20px;
+form input:not(:placeholder-shown) {
+    border: 2px solid #007bff;
 }
 
-.terms a:hover {
-    color: white;
-    background-color: rgb(56, 56, 180);
+.show-password-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    width: 60px;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    font-size: 12px;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.show-password-btn:hover {
+    color: #0056b3; 
 }
 
 .btn {
-    background-color: rgba(0, 0, 150, 0.849);
+    background-color: #3d5a90;
     color: white;
     padding: 10px 5px;
     border: none;
     border-radius: 100px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 1s;
     font-family: "Spectral", serif;
     font-weight: 700;
     font-style: normal;
@@ -247,5 +286,5 @@ input:not(:placeholder-shown) + label {
 }
 
 .btn:hover {
-    background-color: darkblue;
+    background-color: #003459;
 }
