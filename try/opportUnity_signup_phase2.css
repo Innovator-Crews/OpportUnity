@@ -1,0 +1,248 @@
+/* Color palette */
+:root {
+    --nav-bg: #000814;
+    --primary-blue: #001D3D;
+    --secondary-blue: #003566;
+    --highlight-yellow: #FFC300;
+    --accent-yellow: #FFD60A;
+    --white: #F5F5F5;
+    --button: ##002152;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.spectral-regular {
+    font-family: "Spectral", serif;
+    font-weight: 700;
+    font-style: normal;
+}  
+
+body {
+    height: 105vh;
+    font-family: "Spectral", serif;
+    background-color: var(--button);
+    margin: 0px;
+}
+
+/* Responsive if ganto size */
+@media (max-width: 768px) {
+    .signup-container {
+        width: 80%; /* size ng container */
+        margin: auto;
+    }
+
+    .role-btn {
+        flex: 1 1 100%; /* table approach 1 1 */
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .signup-container {
+        width: 90%; /* size ng container */
+        padding: 15px; 
+    }
+
+    h2, p, .login-link p, .login-link a, .terms p, .terms a, .btn {
+        font-size: 2vh; /* font size lahat */
+    }
+}
+
+.container {
+    padding: 30px;
+    height: 100%;
+    width: 100%;
+    background-image: url('testbg1.jpg'); /* Replace 'your-image-path.jpg' with your actual image path */
+    background-size: cover; /* Ensures the image covers the entire div */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
+.signup-container {
+    height: auto;
+    min-width: 300px; 
+    width: 90%; 
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    margin-left: 3%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.backbtn button{
+    color: var(--white);
+    font: 15px;
+    background-color: var(--secondary-blue);
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border: 2px solid var(--nav-bg);
+    text-decoration: none;
+    transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out, border 0.5s ease-in-out;
+    border-radius: 10px;
+}
+
+.backbtn button:hover{
+    color: var(--accent-yellow);
+    background-color: var(--secondary-blue);
+    border: 2px solid var(--accent-yellow);
+    cursor: pointer;
+}
+
+
+
+.main-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Create two equal columns */
+    gap: 15px; /* Space between the cells */
+    width: 100%;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cell {
+    display: flex;
+    flex-direction: column; /* Default to column */
+    gap: 15px;
+    font-size: 18px;
+    background-color: #ffffff;
+    width: 100%; /* Cells will take up full width within the grid */
+}
+
+.cell h3 {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px; /* Adjust this value as needed */
+    font-size: 1.5em; /* Adjust the size of the heading */
+}
+
+
+.cell .one,
+.cell .two,
+.cell .three,
+.cell .four {
+    display: flex;
+    flex-direction: column; /* Column layout for content inside */
+    gap: 15px;
+}
+
+.cell .one{
+    grid-column: span 2;
+}
+
+
+/* form parent */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* input=group parent */
+
+/* .main-container.input-group {
+    position: relative;
+    width: 100%;
+    margin: 10px 0px;
+} */
+
+input {
+    width: 60%;
+    padding: 10px 5px;
+    padding-left: 20px;
+    border: 1px solid #ccc;
+    border-radius: 100px;
+    background-color: transparent;
+    outline: none;
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-family: "Spectral", serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+input:focus{
+    border: 2px solid var(--highlight-yellow);
+    box-shadow: 0 0 5px var(--accent-yellow);
+}
+
+label {
+    color: gray;
+    font-size: 15px;
+    font-weight: normal;
+    margin-top: 5px; /* Space between label and input */
+}
+
+input:focus + label,
+input:not(:placeholder-shown) + label {
+    top: 0px;
+    left: 18px;
+    padding: 0px 5px;
+    background-color: white;
+    font-size: 12px;
+    color: black;
+    letter-spacing: 1px;
+}
+
+form input:hover + label,
+input:not(:placeholder-shown) + label {
+    top: 0px;
+    left: 0px;
+    padding: 0px 5px;
+    border-radius: 0px;
+    background-color: white;
+    font-size: 12px;
+    color: black;
+    letter-spacing: 1px;
+}
+
+form input:not(:placeholder-shown) {
+    border: 2px solid var(--secondary-blue);
+}
+
+.show-password-btn {
+    position: absolute;
+    left: 560px;
+    top: 380px;
+    width: 60px;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    font-size: 12px;
+    color: var(--secondary-blue);
+    cursor: pointer;
+}
+
+.show-password-btn:hover {
+    color: var(--primary-blue); 
+}
+
+.btn {
+    background-color: #3d5a90;
+    color: white;
+    width: 100%;
+    padding: 10px 5px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background-color 1s;
+    font-family: "Spectral", serif;
+    font-weight: 700;
+    font-style: normal;
+    color: white;
+    font-size: 2vh;
+    letter-spacing: 2px;
+}
+
+.btn:hover {
+    background-color: #003459;
+}

@@ -1,0 +1,378 @@
+/* Color palette */
+:root {
+    --nav-bg: #000814;
+    --primary-blue: #001D3D;
+    --secondary-blue: #003566;
+    --highlight-yellow: #FFC300;
+    --accent-yellow: #FFD60A;
+    --white: #F5F5F5;
+    --button: #3F3F40;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.spectral-regular {
+    font-family: "Spectral", serif;
+    font-weight: 700;
+    font-style: normal;
+}  
+
+body {
+    height: 105vh;
+    font-family: "Spectral", serif;
+    background-color: var(--button);
+    margin: 0px;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    z-index: 100;
+    background-color: var(--nav-bg);
+    padding: 15px 30px;
+}
+
+.navbar-left {
+    margin-left: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.navbar img{
+    margin-right: 10px;
+}
+
+.navbar-logo {
+    height: 40px;  
+    width: auto;
+    transition: transform 0.3s ease; 
+    margin-right: 2px; /* space sa logo and opportunity */
+}
+
+.navbar-logo:hover {
+    transform: scale(1.4);  
+}
+
+.navbar .logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 30px; /* space sa opportunity and links */
+    cursor: pointer;
+    transition: color 0.5s ease-in-out;
+}
+
+.navbar .logo:hover{
+    color: var(--accent-yellow);
+}
+
+
+.navbar-left a {
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 50px;
+    margin-left: 20px;
+    white-space: nowrap;
+    width: 80%;;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    font-size: 20px;
+    transition: color 0.5s, background-color 0.5s ease-in-out;
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.nav-links li a:hover {
+    color: var(--secondary-blue);
+    background-color: var(--accent-yellow);
+}
+
+.navbar-right {
+    margin-left: auto;  
+    color: white;
+    font-size: 18px;
+    padding-right: 20px;
+    justify-content: space-between;
+    display: flex; /* Ensures it's displayed properly alongside the button */
+    align-items: center; /* Vertically aligns the content (username and button) */
+}
+
+#userName {
+    margin-right: 5px; /* Adds spacing between the username and logout button */
+    cursor: pointer;
+}
+
+#userName span {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:var(--white);
+    width: 250px;
+    text-decoration: none;
+    transition: color 0.5 ease-in-out;
+}
+
+#userName:hover {
+    color:var(--accent-yellow);
+}
+
+#dropdown {
+    display: none; 
+    /* display: block !important; Force visibility for debugging */
+    position: absolute;
+    top: 60px;
+    right: 200px;
+    background-color: #333;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+#dropdown a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+#dropdown a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.show {
+    display: block;
+}
+
+img{
+    height: 40px;;
+    width: 40px;
+    border-radius:50%;
+}
+
+#logoutBtn {
+    background-color: #ff4d4d; /* Reddish color */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    margin-left: 15px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#logoutBtn:hover {
+    background-color: #e60000; /* Darker red on hover */
+}
+
+.container {
+    padding: 30px;
+    height: 100%;
+    width: 100%;
+    background-image: url('testbg1.jpg'); /* Replace 'your-image-path.jpg' with your actual image path */
+    background-size: cover; /* Ensures the image covers the entire div */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
+.signup-container {
+    height: auto;
+    min-width: 300px; 
+    width: 90%; 
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    margin-left: 3%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.backbtn button{
+    color: var(--white);
+    font: 15px;
+    background-color: var(--secondary-blue);
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border: 2px solid var(--nav-bg);
+    text-decoration: none;
+    transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out, border 0.5s ease-in-out;
+    border-radius: 10px;
+}
+
+.backbtn button:hover{
+    color: var(--accent-yellow);
+    background-color: var(--secondary-blue);
+    border: 2px solid var(--accent-yellow);
+    cursor: pointer;
+}
+
+
+
+.main-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Create two equal columns */
+    gap: 15px; /* Space between the cells */
+    width: 100%;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cell {
+    display: flex;
+    flex-direction: column; /* Default to column */
+    gap: 15px;
+    font-size: 18px;
+    background-color: #ffffff;
+    width: 100%; /* Cells will take up full width within the grid */
+}
+
+.cell h3 {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px; /* Adjust this value as needed */
+    font-size: 1.5em; /* Adjust the size of the heading */
+}
+
+
+.cell .one,
+.cell .two,
+.cell .three,
+.cell .four {
+    display: flex;
+    flex-direction: column; /* Column layout for content inside */
+    gap: 15px;
+}
+
+.cell .one{
+    grid-column: span 2;
+}
+
+
+/* form parent */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* input=group parent */
+
+/* .main-container.input-group {
+    position: relative;
+    width: 100%;
+    margin: 10px 0px;
+} */
+
+input {
+    width: 60%;
+    padding: 10px 5px;
+    padding-left: 20px;
+    border: 1px solid #ccc;
+    border-radius: 100px;
+    background-color: transparent;
+    outline: none;
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-family: "Spectral", serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+input:focus{
+    border: 2px solid var(--highlight-yellow);
+    box-shadow: 0 0 5px var(--accent-yellow);
+}
+
+label {
+    color: gray;
+    font-size: 15px;
+    font-weight: normal;
+    margin-top: 5px; /* Space between label and input */
+}
+
+input:focus + label,
+input:not(:placeholder-shown) + label {
+    top: 0px;
+    left: 18px;
+    padding: 0px 5px;
+    background-color: white;
+    font-size: 12px;
+    color: black;
+    letter-spacing: 1px;
+}
+
+form input:hover + label,
+input:not(:placeholder-shown) + label {
+    top: 0px;
+    left: 0px;
+    padding: 0px 5px;
+    border-radius: 0px;
+    background-color: white;
+    font-size: 12px;
+    color: black;
+    letter-spacing: 1px;
+}
+
+form input:not(:placeholder-shown) {
+    border: 2px solid var(--secondary-blue);
+}
+
+.show-password-btn {
+    position: absolute;
+    left: 560px;
+    top: 368px;
+    width: 60px;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    font-size: 12px;
+    color: var(--secondary-blue);
+    cursor: pointer;
+}
+
+.show-password-btn:hover {
+    color: var(--primary-blue); 
+}
+
+.btn {
+    background-color: #3d5a90;
+    color: white;
+    width: 100%;
+    padding: 10px 5px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background-color 1s;
+    font-family: "Spectral", serif;
+    font-weight: 700;
+    font-style: normal;
+    color: white;
+    font-size: 2vh;
+    letter-spacing: 2px;
+}
+
+.btn:hover {
+    background-color: #003459;
+}

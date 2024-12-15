@@ -1,0 +1,1128 @@
+<?php
+// Start the session
+session_start();
+    // Global variables
+    $userNAME = $_SESSION['username'] ?? null;
+    $userPASSWORD = $_SESSION['password'] ?? null;
+    $conn = new mysqli("localhost", "root", "", "opportunity");
+    $sql = "SELECT * FROM user WHERE user_username='$userNAME' AND user_password='$userPASSWORD'";
+    $result = mysqli_query($conn, $sql);
+
+    $pic_identifier = '';
+    // purpose nito is kahit na ivisit ng user yung ibang user is mananatili padin yung notif nya
+    if ($result && ($userNAME != null && $userPASSWORD != null)) {
+        $num_rows = mysqli_num_rows($result);
+        if ($num_rows > 0) 
+        {
+            $user = mysqli_fetch_assoc($result);
+            $first = $user['user_firstname'];
+            $last = $user['user_lastname'];
+            $name = $first . " " . $last;
+            $pic = "data:image/jpeg;base64," . base64_encode($user['profile_photo']);
+            $role = $user['user_type'];
+            $_SESSION['usertype'] = $role;
+            //para lang makita if may laman bang picture yung blob or wala
+            $pic_identifier = base64_encode($user['profile_photo']);
+            $user_notification = $user['user_notification'];
+            $user_ID = $user['user_ID'];
+        }
+    }
+
+// ito ay kapag yung employer nagview ng profile ng user
+
+// kapag niclick ng user yung ibang user profile, ito yung gagana
+// kapag nag flase tong if statement na to, ibigsabihin niclick ng user sarili nyang profile
+if (isset($_POST['different_user_type']) && isset($_POST['different_user_userid']) && $_POST['different_user_type'] == "employee") 
+{ 
+    // ito ay para ihide yung edit button kapag nagview ng profile ng iba yung user
+    $edit = false;
+
+    // it ay para makita sa navigationbar yung profile ng user(hindi user na ivivisit)
+    // Retrieve session variables
+    $userNAME = $_SESSION['username'] ?? null;
+    $userPASSWORD = $_SESSION['password'] ?? null;
+    $userID = $_SESSION['id'] ?? null;
+
+    // Database connection
+    $conn = new mysqli("localhost", "root", "", "opportunity");
+    $sql = "SELECT * FROM user WHERE user_username='$userNAME' AND user_password='$userPASSWORD'";
+    $result = mysqli_query($conn, $sql);
+
+    $pic_identifier = '';
+
+    // Redirect to login page if not logged in
+    if ($result && ($userNAME != null && $userPASSWORD != null)) {
+        $num_rows = mysqli_num_rows($result);
+        if ($num_rows > 0) {
+            $user = mysqli_fetch_assoc($result);
+            $first = $user['user_firstname'];
+            $last = $user['user_lastname'];
+            $name = $first . " " . $last;
+            $pic = "data:image/jpeg;base64," . base64_encode($user['profile_photo']);
+            $role = $user['user_type'];
+            //para lang makita if may laman bang picture yung blob or wala
+            $pic_identifier = base64_encode($user['profile_photo']);
+        }
+    }
+
+    //eto naman yung para sa user na vivisit
+    $different_user_type = $_POST['different_user_type']; 
+    $different_user_userid = $_POST['different_user_userid'];
+
+    // $different_user_userid at $different_user_role ay parehas lang
+
+    $conn = new mysqli("localhost", "root", "", "opportunity");
+    $sql = "SELECT * FROM user WHERE user_ID='$different_user_userid' AND user_type='$different_user_type'";
+    $result = mysqli_query($conn, $sql);
+
+    $different_user_pic_identifier = '';
+    
+    if ($result) {
+        $num_rows = mysqli_num_rows($result);
+        if ($num_rows > 0) {
+            $user = mysqli_fetch_assoc($result);
+            $different_user_user = mysqli_fetch_assoc($result);
+            $different_user_first = $user['user_firstname'];
+            $different_user_last = $user['user_lastname'];
+            $different_user_username = $user['user_username'];
+            $different_user_name = $different_user_first . " " . $different_user_last;
+            $different_user_pic = "data:image/jpeg;base64," . base64_encode($user['profile_photo']);
+            $different_user_role = $user['user_type'];
+            //para lang makita if may laman bang picture yung blob or wala
+            $different_user_pic_identifier = base64_encode($user['profile_photo']);
+
+            // 2nd form
+            $different_user_date_of_birth = $user['date_of_birth'];
+            $different_user_age = $user['age'];
+            $different_user_use_phone_number = $user['use_phone_number'];
+            $different_user_city = $user['city'];
+            $different_user_province = $user['province'];
+            $different_user_country = $user['country'];
+            $different_user_user_URL = $user['user_URL'];
+
+            // jobseeker form
+            if($different_user_role == 'employee'){
+                // $sex = $_SESSION['sex'] = $user['gender'] ?? null;
+                $different_user_school = $user['school'];
+                $different_user_degree = $user['degree'];
+                $different_user_year_graduated = $user['year_graduated'];
+                $different_user_job_title_experience = $user['job_title_experience'];
+                $different_user_company_experience = $user['company_experience'];
+                $different_user_year_of_service_experience = $user['year_of_service_experience'];
+                $different_user_job_description_jobseeker = $user['job_description_jobseeker'];
+                $different_user_jobseeker_skill = $user['jobseeker_skill'];
+                $different_user_jobseeker_certification = $user['jobseeker_certification'];
+                $different_user_porfolio = "data:image/jpeg;base64," . base64_encode($user['porfolio']);
+                $different_user_job_type = $user['job_type'];
+                $different_user_desired_industry = $user['desired_industry'];
+                $different_user_expected_salary_range = $user['expected_salary_range'];
+                $different_user_willingness_to_relocate = $user['willingness_to_relocate'];
+                $different_user_work_schedule_preference = $user['work_schedule_preference'];
+            }
+            else if($different_user_role == 'employer'){
+                $different_user_company_address_city = $user['company_address_city'];
+                $different_user_company_address_province = $user['company_address_province'];
+                $different_user_company_address_country = $user['company_address_country'];
+                $different_user_company_address_URL = $user['company_address_URL'];
+                $different_user_company_industry_type = $user['company_industry_type'];
+                $different_user_company_size = $user['company_size'];
+                $different_user_position_in_company = $user['position_in_company'];
+                $different_user_years_with_company = $user['years_with_company'];
+                $different_user_preferred_hiring_location = $user['preferred_hiring_location'];
+                $different_user_salary_range = $user['salary_range'];
+            }
+        }
+    } else {
+        header('Location: opportUnity_login.php');
+        exit();
+    }
+    // kapag employer nagvisit ng jobseeker eto gagana
+}else if (isset($_POST['different_user_type']) && isset($_POST['different_user_userid']) && $_POST['different_user_type'] == "employer") 
+{ 
+    // ito ay para ihide yung edit button kapag nagview ng profile ng iba yung user
+    $edit = false;
+
+    // it ay para makita sa navigationbar yung profile ng user(hindi user na ivivisit)
+    // Retrieve session variables
+    $userNAME = $_SESSION['username'] ?? null;
+    $userPASSWORD = $_SESSION['password'] ?? null;
+    $userID = $_SESSION['id'] ?? null;
+
+    // Database connection
+    $conn = new mysqli("localhost", "root", "", "opportunity");
+    $sql = "SELECT * FROM user WHERE user_username='$userNAME' AND user_password='$userPASSWORD'";
+    $result = mysqli_query($conn, $sql);
+
+    $pic_identifier = '';
+
+    // Redirect to login page if not logged in
+    if ($result && ($userNAME != null && $userPASSWORD != null)) {
+        $num_rows = mysqli_num_rows($result);
+        if ($num_rows > 0) {
+            $user = mysqli_fetch_assoc($result);
+            $first = $user['user_firstname'];
+            $last = $user['user_lastname'];
+            $name = $first . " " . $last;
+            $pic = "data:image/jpeg;base64," . base64_encode($user['profile_photo']);
+            $role = $user['user_type'];
+            //para lang makita if may laman bang picture yung blob or wala
+            $pic_identifier = base64_encode($user['profile_photo']);
+        }
+    }
+
+    //eto naman yung para sa user na vivisit
+    $different_user_type = $_POST['different_user_type']; 
+    $different_user_userid = $_POST['different_user_userid'];
+
+    // $different_user_userid at $different_user_role ay parehas lang
+
+    $conn = new mysqli("localhost", "root", "", "opportunity");
+    $sql = "SELECT * FROM user WHERE user_ID='$different_user_userid' AND user_type='$different_user_type'";
+    $result = mysqli_query($conn, $sql);
+
+    $different_user_pic_identifier = '';
+    
+    if ($result) {
+        $num_rows = mysqli_num_rows($result);
+        if ($num_rows > 0) {
+            $user = mysqli_fetch_assoc($result);
+            $different_user_user = mysqli_fetch_assoc($result);
+            $different_user_first = $user['user_firstname'];
+            $different_user_last = $user['user_lastname'];
+            $different_user_username = $user['user_username'];
+            $different_user_name = $different_user_first . " " . $different_user_last;
+            $different_user_pic = "data:image/jpeg;base64," . base64_encode($user['profile_photo']);
+            $different_user_role = $user['user_type'];
+            //para lang makita if may laman bang picture yung blob or wala
+            $different_user_pic_identifier = base64_encode($user['profile_photo']);
+
+            // 2nd form
+            $different_user_date_of_birth = $user['date_of_birth'];
+            $different_user_age = $user['age'];
+            $different_user_use_phone_number = $user['use_phone_number'];
+            $different_user_city = $user['city'];
+            $different_user_province = $user['province'];
+            $different_user_country = $user['country'];
+            $different_user_user_URL = $user['user_URL'];
+
+            // jobseeker form
+            if($different_user_role == 'employee'){
+                // $sex = $_SESSION['sex'] = $user['gender'] ?? null;
+                $different_user_school = $user['school'];
+                $different_user_degree = $user['degree'];
+                $different_user_year_graduated = $user['year_graduated'];
+                $different_user_job_title_experience = $user['job_title_experience'];
+                $different_user_company_experience = $user['company_experience'];
+                $different_user_year_of_service_experience = $user['year_of_service_experience'];
+                $different_user_job_description_jobseeker = $user['job_description_jobseeker'];
+                $different_user_jobseeker_skill = $user['jobseeker_skill'];
+                $different_user_jobseeker_certification = $user['jobseeker_certification'];
+                $different_user_porfolio = "data:image/jpeg;base64," . base64_encode($user['porfolio']);
+                $different_user_job_type = $user['job_type'];
+                $different_user_desired_industry = $user['desired_industry'];
+                $different_user_expected_salary_range = $user['expected_salary_range'];
+                $different_user_willingness_to_relocate = $user['willingness_to_relocate'];
+                $different_user_work_schedule_preference = $user['work_schedule_preference'];
+            }
+            else if($different_user_role == 'employer'){
+                $different_user_company_address_city = $user['company_address_city'];
+                $different_user_company_address_province = $user['company_address_province'];
+                $different_user_company_address_country = $user['company_address_country'];
+                $different_user_company_address_URL = $user['company_address_URL'];
+                $different_user_company_industry_type = $user['company_industry_type'];
+                $different_user_company_size = $user['company_size'];
+                $different_user_position_in_company = $user['position_in_company'];
+                $different_user_years_with_company = $user['years_with_company'];
+                $different_user_preferred_hiring_location = $user['preferred_hiring_location'];
+                $different_user_salary_range = $user['salary_range'];
+            }
+        }
+    } else {
+        header('Location: opportUnity_login.php');
+        exit();
+    }
+}
+else{
+    // ito ay para ipakita yung edit button kapag nagview ng profile yung sarili nya
+    $edit = true;
+
+    // Retrieve session variables
+    $userNAME = $_SESSION['username'] ?? null;
+    $userPASSWORD = $_SESSION['password'] ?? null;
+    $userID = $_SESSION['id'] ?? null;
+
+    // Database connection
+    $conn = new mysqli("localhost", "root", "", "opportunity");
+    $sql = "SELECT * FROM user WHERE user_username='$userNAME' AND user_password='$userPASSWORD'";
+    $result = mysqli_query($conn, $sql);
+
+    $pic_identifier = '';
+
+    if ($result && ($userNAME != null && $userPASSWORD != null)) {
+        $num_rows = mysqli_num_rows($result);
+        if ($num_rows > 0) {
+            $user = mysqli_fetch_assoc($result);
+            $first = $user['user_firstname'];
+            $last = $user['user_lastname'];
+            $name = $first . " " . $last;
+            $username = $user['user_username'];
+            $pic = "data:image/jpeg;base64," . base64_encode($user['profile_photo']);
+            $role = $user['user_type'];
+            //para lang makita if may laman bang picture yung blob or wala
+            $pic_identifier = base64_encode($user['profile_photo']);
+            $user_notification = $user['user_notification'];
+
+            // 2nd form
+            $date_of_birth = $user['date_of_birth'];
+            $age = $user['age'];
+            $use_phone_number = $user['use_phone_number'];
+            $city = $user['city'];
+            $province = $user['province'];
+            $country = $user['country'];
+            $user_URL = $user['user_URL'];
+
+            // jobseeker form
+            if($role == 'employee'){
+                // $sex = $_SESSION['sex'] = $user['gender'] ?? null;
+                $school = $user['school'];
+                $degree = $user['degree'];
+                $year_graduated = $user['year_graduated'];
+                $job_title_experience = $user['job_title_experience'];
+                $company_experience = $user['company_experience'];
+                $year_of_service_experience = $user['year_of_service_experience'];
+                $job_description_jobseeker = $user['job_description_jobseeker'];
+                $jobseeker_skill = $user['jobseeker_skill'];
+                $jobseeker_certification = $user['jobseeker_certification'];
+                $porfolio = "data:image/jpeg;base64," . base64_encode($user['porfolio']);
+                $job_type = $user['job_type'];
+                $desired_industry = $user['desired_industry'];
+                $expected_salary_range = $user['expected_salary_range'];
+                $willingness_to_relocate = $user['willingness_to_relocate'];
+                $work_schedule_preference = $user['work_schedule_preference'];
+            }
+            else if($role == 'employer'){
+                $company_address_city = $user['company_address_city'];
+                $company_address_province = $user['company_address_province'];
+                $company_address_country = $user['company_address_country'];
+                $company_address_URL = $user['company_address_URL'];
+                $company_industry_type = $user['company_industry_type'];
+                $company_size = $user['company_size'];
+                $position_in_company = $user['position_in_company'];
+                $years_with_company = $user['years_with_company'];
+                $preferred_hiring_location = $user['preferred_hiring_location'];
+                $salary_range = $user['salary_range'];
+            }
+        }
+    } else {
+        header('Location: opportUnity_login.php');
+        exit();
+    }
+}
+    $conn = new mysqli("localhost", "root", "", "opportunity");
+    $sql = "SELECT * FROM admin WHERE user_ID = '$userID'";
+    $result = mysqli_query($conn, $sql);
+    $user = mysqli_fetch_assoc($result);
+    $AccountState = $user['AccountState'];
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="opportUnity_dashboard_jobseeker.css">
+    <link rel="stylesheet" href="view_profile.css">
+    <link rel="icon" type="image/png" href="faviconlogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+        <div class="navbar-left">
+            <img onclick="logout()" src="logo.png" alt="OpportUnity Logo" class="navbar-logo">
+            <div onclick="logout()" class="logo">OpportUnity</div>
+            <ul class="nav-links">
+                <li><a href="opportUnity.html">Landing Page</a></li>
+                <li><a href="#">Terms & Condition</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <div id="userMenu" class="user-menu">
+                <span id="userName">Welcome, <?=$name?>!</span>
+                <div id="dropdown" class="dropdown-content">
+                    <a href="profile.html">View Profile</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                </div>
+            </div>
+            <a href="opportUnity_notification_list.php"><div id="user_notif" onclick="" style="width:40px; height:40px; border-radius:100%; background-size:cover; margin:0px 20px 0px 30px;"></div></a>
+            <?php if(!($pic_identifier == null)){?>
+                <a href="view_profile.php"><img style="border-radius:100%;" href="view_profile.php" src="<?=$pic?>" alt="" width="40px" height="40px"></a>
+            <?php }else{?>
+                <a href="view_profile.php"><img style="border-radius:100%;" href="view_profile.php" src="default_profile.jpg" alt="" width="40px" height="40px"></a>
+            <?php }?>
+        </div>
+    </nav>
+
+    <div>
+        <div id="container">
+            
+                    <!-- kapag may value yung $different_user_role -->
+                    <?php if(!(isset($different_user_role))) 
+                            {
+                                if($role == 'employee'){
+                        ?>
+                    <div class="each-section">
+                <div class="title-personal">
+                    <!-- <a href="opportUnity_dashboard_jobseeker.php">
+                        <button><--</button>
+                    </a> -->
+                <div class="personal-details"><p>Personal Details</p></div>
+                    <div class="title-personalChild">
+                        <?php if ($edit) {?>
+                        <form action="opportUnity_edit_profile.php" method="POST">
+                            <input type="hidden" name="role" value="<?=$role?>">
+                            <input type="hidden" name="user_ID" value="<?=$user_ID?>">
+                            <button class="editbutton" type="submit">edit profile</button>
+                        </form>
+                        <?php }?>
+                        
+                        <div class="accountState"><?=$AccountState?></div>
+                    </div>
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Full Name: </span><span class="data-value"><?=$name?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Date of Birth: </span><span class="data-value"><?=$date_of_birth?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Profile Photo: </span><span class="data-value"><img src="<?=$pic?>" alt="" width="100px" height="100px"></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Contact Number: </span><span class="data-value"><?=$use_phone_number?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Age: </span><span class="data-value"><?=$age?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Personal Email Address: </span><span class="data-value"><?=$username?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <!-- <a href="opportUnity_dfashboard_jobseeker.php">
+                        <button><--</button>
+                    </a> -->
+                    <div class="personal-details"><p>Professional Details</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Educational Background: </span><span class="data-value">
+                            <p><?=$school?></p>
+                            <p><?=$degree?></p>
+                            <p><?=$year_graduated?></p>
+                        </span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>LinkedIn Profile URL: </span><span class="data-value"><?php if(isset($user_URL))$user_URL ?></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Portfolio Resume Upload: </span><span class="data-value"><img src="<=$porfolio?>" alt=""></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Work Experience: </span><span class="data-value"><?=$company_size ?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <!-- <a href="opportUnity_dashboard_jobseeker.php">
+                        <button><--</button>
+                    </a> -->
+                    <div class="personal-details"><p>Preferences</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div style="width:100%; 
+    height:33%; 
+    display:flex;
+    justify-content:space-between;
+    align-items:center;">
+                        <div style="width:200px;"><div class="single-data"><span>Job Preferences: </span><span class="data-value"><p><?=$work_schedule_preference?></p></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Desired Industry: </span><span class="data-value"><?=$desired_industry ?></span></div></div>
+                    </div>
+                    <div style="width:100%; 
+    height:33%; 
+    display:flex;
+    justify-content:space-between;
+    align-items:center;">
+                        <div style="width:200px;"><div class="single-data"><span>Expected Salary: </span><span class="data-value"><?=$expected_salary_range ?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Willingness Relocate: </span><span class="data-value"><?=$willingness_to_relocate?></span></div></div>
+                    </div>
+                    <div style="width:100%; 
+    height:33%; 
+    display:flex;
+    justify-content:space-between;
+    align-items:center;">
+                        <div style="width:200px;"><div class="single-data"><span>Work Hiring Preferences: </span><span class="data-value"><?=$work_schedule_preference ?></span></div></div>
+                    </div>
+                </div>
+            </div>
+                <?php }else if($role == 'employer'){?>
+                    <div class="each-section">
+                <div class="title-personal">
+                <div class="personal-details"><p>Personal Details</p></div>
+                    <div class="title-personalChild">
+                        <?php if ($edit) {?>
+                        <form action="opportUnity_edit_profile.php" method="POST">
+                            <input type="hidden" name="role" value="<?=$role?>">
+                            <input type="hidden" name="user_ID" value="<?=$user_ID?>">
+                            <button class="editbutton" type="submit">edit profile</button>
+                        </form>
+                        <?php }?>
+                        
+                        <div class="accountState"><?=$AccountState?></div>
+                    </div>
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Full Name: </span><span class="data-value"><?=$name?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Date of Birth: </span><span class="data-value"><?=$date_of_birth?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Profile Photo: </span><span class="data-value"><img src="<?=$pic?>" alt="" width="100px" height="100px"></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Contact Number: </span><span class="data-value"><?=$use_phone_number?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Age: </span><span class="data-value"><?=$age?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Personal Email Address: </span><span class="data-value"><?=$username?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <div class="personal-details"><p>Company Details</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Company Address: </span><span class="data-value"></span>
+                            <?=$company_address_city?>, 
+                            <?=$company_address_province?>, 
+                            <?=$company_address_country?>
+                        </div>
+                    </div>
+                        <div style="width:200px; "><div class="single-data"><span>Company Website: </span><span class="data-value"><?=$company_address_URL ?></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Industry Type: </span><span class="data-value"><?=$company_industry_type ?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Company Size: </span><span class="data-value"><?=$company_size ?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <div class="personal-details"><p>Professional Details</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Position in the Company: </span><span class="data-value"><?=$position_in_company?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Years in Company: </span><span class="data-value"><?=$years_with_company ?></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>LinkedIn Profile: </span><span class="data-value"><?=$user_URL ?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <div class="personal-details"><p>Preferences for Job Postings</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                    <div style="width:200px;"><div class="single-data"><span>Typical Hiring Budget/Salary Range: </span><span class="data-value"><?=$salary_range ?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Preferred Hiring Location: </span><span class="data-value"><?=$preferred_hiring_location ?></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                    </div>
+                </div>
+            </div>
+                <?php }
+                }else{?>
+                <!-- gagana lang tong else statement kapag viview ng user and profile ng ibang user -->
+                <?php if($different_user_role == 'employee'){?>
+            <div class="each-section">
+                <div class="title-personal">
+                    <!-- <a href="opportUnity_dashboard_jobseeker.php">
+                        <button><--</button>
+                    </a> -->
+                <div class="personal-details"><p>Personal Details</p></div>
+                    <div class="title-personalChild">
+                        <?php if ($edit) {?>
+                        <form action="opportUnity_edit_profile.php" method="POST">
+                            <input type="hidden" name="role" value="<?=$role?>">
+                            <input type="hidden" name="user_ID" value="<?=$user_ID?>">
+                            <button class="editbutton" type="submit">edit profile</button>
+                        </form>
+                        <?php }?>
+                        
+                        <div class="accountState"><?=$AccountState?></div>
+                    </div>
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Full Name: </span><span class="data-value"><?=$different_user_name?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Date of Birth: </span><span class="data-value"><?=$different_user_date_of_birth?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Profile Photo: </span><span class="data-value"><img src="<?=$different_user_pic?>" alt="" width="100px" height="100px"></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Contact Number: </span><span class="data-value"><?=$different_user_use_phone_number?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Age: </span><span class="data-value"><?=$different_user_age?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Personal Email Address: </span><span class="data-value"><?=$different_user_username?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <!-- <a href="opportUnity_dashboard_jobseeker.php">
+                        <button><--</button>
+                    </a> -->
+                    <div class="personal-details"><p>Professional Details</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Educational Background: </span><span class="data-value">
+                            <p><?=$different_user_school?></p>
+                            <p><?=$different_user_degree?></p>
+                            <p><?=$different_user_year_graduated?></p>
+                        </span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>LinkedIn Profile URL: </span><span class="data-value"><?php if(isset($different_user_user_URL))$different_user_user_URL ?></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Portfolio Resume Upload: </span><span class="data-value"><img src="<=$different_user_porfolio?>" alt=""></span></div></div>
+
+                        <!-- ayusinn to mamaya -->
+                        <div style="width:200px;"><div class="single-data"><span>Work Experience: </span><span class="data-value"><?php if(isset($different_user_company_size))$different_user_company_size ?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <!-- <a href="opportUnity_dashboard_jobseeker.php">
+                        <button><--</button>
+                    </a> -->
+                    <div class="personal-details"><p>Preferences</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div style="width:100%; 
+    height:33%; 
+    display:flex;
+    justify-content:space-between;
+    align-items:center;">
+                        <div style="width:200px;"><div class="single-data"><span>Job Preferences: </span><span class="data-value"><p><?=$different_user_work_schedule_preference?></p></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Desired Industry: </span><span class="data-value"><?=$different_user_desired_industry ?></span></div></div>
+                    </div>
+                    <div style="width:100%; 
+    height:33%; 
+    display:flex;
+    justify-content:space-between;
+    align-items:center;">
+                        <div style="width:200px;"><div class="single-data"><span>Expected Salary: </span><span class="data-value"><?=$different_user_expected_salary_range ?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Willingness Relocate: </span><span class="data-value"><?=$different_user_willingness_to_relocate?></span></div></div>
+                    </div>
+                    <div style="width:100%; 
+    height:33%; 
+    display:flex;
+    justify-content:space-between;
+    align-items:center;">
+                        <div style="width:200px;"><div class="single-data"><span>Work Hiring Preferences: </span><span class="data-value"><?=$different_user_work_schedule_preference ?></span></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- end of if statement ng employee -->
+
+                <?php }else if($different_user_role == 'employer'){?>
+                    <div class="each-section">
+                <div class="title-personal">
+                <div class="personal-details"><p>Personal Details</p></div>
+                    <div class="title-personalChild">
+                        <?php if ($edit) {?>
+                        <form action="opportUnity_edit_profile.php" method="POST">
+                            <input type="hidden" name="role" value="<?=$role?>">
+                            <input type="hidden" name="user_ID" value="<?=$user_ID?>">
+                            <button class="editbutton" type="submit">edit profile</button>
+                        </form>
+                        <?php }?>
+                        
+                        <div class="accountState"><?=$AccountState?></div>
+                    </div>
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Full Name: </span><span class="data-value"><?=$different_user_name?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Date of Birth: </span><span class="data-value"><?=$different_user_date_of_birth?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Profile Photo: </span><span class="data-value"><img src="<?=$different_user_pic?>" alt="" width="100px" height="100px"></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Contact Number: </span><span class="data-value"><?=$different_user_use_phone_number?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Age: </span><span class="data-value"><?=$different_user_age?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Personal Email Address: </span><span class="data-value"><?=$different_user_username?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <div class="personal-details"><p>Company Details</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Company Address: </span><span class="data-value"></span>
+                            <?=$different_user_company_address_city?>, 
+                            <?=$different_user_company_address_province?>, 
+                            <?=$different_user_company_address_country?>
+                        </div>
+                    </div>
+                        <div style="width:200px; "><div class="single-data"><span>Company Website: </span><span class="data-value"><?=$different_user_company_address_URL ?></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Industry Type: </span><span class="data-value"><?=$different_user_company_industry_type ?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Company Size: </span><span class="data-value"><?=$different_user_company_size ?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <div class="personal-details"><p>Professional Details</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>Position in the Company: </span><span class="data-value"><?=$different_user_position_in_company?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Years in Company: </span><span class="data-value"><?=$different_user_years_with_company ?></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                        <div style="width:200px;"><div class="single-data"><span>LinkedIn Profile: </span><span class="data-value"><?=$different_user_user_URL ?></span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="each-section">
+                <div class="title-personal">
+                    <div class="personal-details"><p>Preferences for Job Postings</p></div>
+                    
+                </div>
+                <div class="personal-data">
+                    <div class="set-of-data">
+                    <div style="width:200px;"><div class="single-data"><span>Typical Hiring Budget/Salary Range: </span><span class="data-value"><?=$different_user_salary_range ?></span></div></div>
+                        <div style="width:200px;"><div class="single-data"><span>Preferred Hiring Location: </span><span class="data-value"><?=$different_user_preferred_hiring_location ?></span></div></div>
+                    </div>
+                    <div class="set-of-data">
+                    </div>
+                </div>
+            </div>
+                <?php }}?>
+            <!-- end of else -->
+            
+                
+        </div>
+    </div>
+    <script>
+        var user_notification = "<?=$user_notification?>";
+    console.log(user_notification);
+    var unotif = document.getElementById('user_notif');
+
+    function user_notification_icon() {
+        if (user_notification == 1) {
+            unotif.style.backgroundImage = "url('red_notif.jpg')";
+        } else {
+            // Add your else condition here
+            unotif.style.backgroundImage = "url('default_notif.jpg')"; // Example default image
+        }
+    }
+// Call the function to set the initial icon 
+    user_notification_icon();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+edit php profile
+
+
+
+
+Starting
+    <div style="height:auto;">
+        <div class="signup-container">
+            <p>Grab Opportunity with us!</p>
+            
+
+
+            
+            <!-- Form -->
+            <form action="edit_profile.php" method="POST" enctype="multipart/form-data">
+
+            
+                <div class="name-fields">
+                    <div class="input-group">
+                        <input type="text" name="first_name" id="first_name" value="<?=$user_firstname?>" required placeholder="<?=$user_firstname?>">
+                        <label for="first_name">First name</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" name="last_name" id="last_name" value="<?=$user_lastname?>" required placeholder="<?=$user_lastname?>">
+                        <label for="last_name">Last name</label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" name="email" id="email" value="<?=$user_username?>" required placeholder="<?=$user_username?>">
+                    <label for="email">Email</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" name="password" id="password" value="<?=$user_password?>" require placeholder="<?=$user_password?>">
+                    <label for="password">Password</label>
+                </div>
+
+                <!-- <div class="input-group">
+                    <input type="password" name="confirm_password" id="confirm_password" value="<?=$user_password?>" required>
+                    <label for="confirm_password">Confirm Password</label>
+                </div> -->
+
+                <div class="input-group">
+                    <input class="inputs" type="text" name="date_of_birth" value="<?=$date_of_birth?>" placeholder="<?=$date_of_birth?>">
+                    <label for="confirm_password">Date of Birth</label>
+                </div>
+
+                <div class="input-group">
+                    <input class="inputs" type="text" name="age" value="<?=$age?>" placeholder="<?=$age?>">
+                    <label for="confirm_password">Age</label>
+                </div>
+
+                <div class="input-group">
+                <input class="inputs" type="text" name="use_phone_number" value="<?=$use_phone_number?>" placeholder="<?=$use_phone_number?>">
+                    <label for="confirm_password">Phone Number</label>
+                </div>
+
+
+
+                <div class="input-group">
+                    <input class="inputs" type="text" name="date_of_birth" value="<?=$date_of_birth?>" placeholder="<?=$date_of_birth?>">
+                    <label for="confirm_password">Date of Birth</label>
+                </div>
+
+                <div class="input-group">
+                    <input class="inputs" type="text" name="age" value="<?=$age?>" placeholder="<?=$age?>">
+                    <label for="confirm_password">Age</label>
+                </div>
+
+                <div class="input-group">
+                <input class="inputs" type="text" name="use_phone_number" value="<?=$use_phone_number?>" placeholder="<?=$use_phone_number?>">
+                    <label for="confirm_password">Phone Number</label>
+                </div>
+                
+
+                <input class="inputs" type="text" name="city" value="<?=$city?>">
+                <input class="inputs" type="text" name="province" value="<?=$province?>">
+                <input class="inputs" type="text" name="country" value="<?=$country?>">
+                <input class="inputs" type="hidden" name="role" value="<?=$role?>">
+                <input class="inputs" type="hidden" name="user_ID" value="<?=$user_ID?>">
+                <!-- <input type="file" name="pic" value="<?=$pic?>"><br/> -->
+
+                <?php if($role == "employee"){?>
+                <!-- jobseeker -->
+                <div id="jobseeker" class="secondfrm">
+                    <!-- educational background -->
+                    <input class="inputs" type="text" name="school" value="<?=$school?>" >
+                    <input class="inputs" type="text" name="degree" value="<?=$degree?>" >
+                    <input class="inputs" type="text" name="year_graduated" value="<?=$year_graduated?>">
+
+                    <!-- work experience -->
+                    <input class="inputs" type="text" name="job_title_experience" value="<?=$job_title_experience?>">
+                    <input class="inputs" type="text" name="company_experience" value="<?=$company_experience?>">
+                    <input class="inputs" type="text" name="year_of_service_experience" value="<?=$year_of_service_experience?>">
+                    <input class="inputs" type="text" name="job_description_jobseeker" value="<?=$job_description_jobseeker?>"> 
+
+                    <!-- skills and certification -->
+                    <input class="inputs" type="text" name="jobseeker_skill" value="<?=$jobseeker_skill?>">
+                    <input class="inputs" type="text" name="jobseeker_certification" value="<?=$jobseeker_certification?>">
+
+                    <!-- portfolio/resume -->
+                    <!-- <input type="file" name="porfolio"><br/> -->
+
+                    <!-- profile url -->
+                    <input class="inputs" type="text" name="user_URL" value="<?=$user_URL?>"> 
+
+                    <!-- preference -->
+                    <input class="inputs" type="text" name="job_type" value="<?=$job_type?>">
+                    <input class="inputs" type="text" name="desired_industry" value="<?=$desired_industry?>">
+                    <input class="inputs" type="text" name="expected_salary_range" value="<?=$expected_salary_range?>">
+                    <input class="inputs" type="text" name="willingness_to_relocate" value="<?=$willingness_to_relocate?>"> 
+                    <input class="inputs" type="text" name="work_schedule_preference" value="<?=$work_schedule_preference?>">
+                </div>
+                <?php }else if($role == "employer"){?>
+                <!-- employer -->
+                <div id="employer"  class="secondfrm">
+                    <!-- Company Address -->
+                    <input class="inputs" type="text" name="company_address_city" value="<?=$company_address_city?>" >
+                    <input class="inputs" type="text" name="company_address_province" value="<?=$company_address_province?>" >
+                    <input class="inputs" type="text" name="company_address_country" value="<?=$company_address_country?>" >
+                    <input class="inputs" type="text" name="company_address_URL" value="<?=$company_address_URL?>" > 
+                    <input class="inputs" type="text" name="company_industry_type" value="<?=$company_industry_type?>">
+                    <input class="inputs" type="text" name="company_size" value="<?=$company_size?>" >
+
+                    <!-- Professional Details -->
+                    <input class="inputs" type="text" name="position_in_company" value="<?=$position_in_company?>">
+                    <input class="inputs" type="text" name="years_with_company" value="<?=$years_with_company?>">
+                    <input class="inputs" type="text" name="user_URL" value="<?=$user_URL?>"> 
+
+                    <!-- Preference for Job Postings -->
+                    <input class="inputs" type="text" name="preferred_hiring_location" value="<?=$preferred_hiring_location?>" >
+                    <input class="inputs" type="text" name="salary_range" value="<?=$salary_range?>" >
+                </div>
+                <?php }?>
+                <button type="submit" class="btn">Edit Account</button>
+            </form>
+            <!-- Finale -->
+            <div class="terms">
+                    <p>
+                        By creating an account, you agree to our <br><a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>.
+                    </p>
+                 </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    notes for new view profile
+
+    
+            <?php 
+                }
+
+                } else {
+            
+            ?>
+                <!-- gagana lang tong else statement kapag viview ng user and profile ng ibang user -->
+
+                <?php 
+                    if($different_user_role == 'employee') 
+                    {
+                ?>
+                        <div class="each-section">
+
+                            <div class="title-personal">
+                                <!-- <a href="opportUnity_dashboard_jobseeker.php">
+                                    <button><--</button>
+                                </a> -->
+                                <div class="personal-details">
+                                    <p>Personal Details</p>
+                                </div>
+                                <div class="title-personalChild">
+                                    <?php if ($edit) {?>
+
+                                    <form action="opportUnity_edit_profile.php" method="POST">
+                                        <input type="hidden" name="role" value="<?=$role?>">
+                                        <input type="hidden" name="user_ID" value="<?=$user_ID?>">
+                                        <button class="editbutton" type="submit">edit profile</button>
+                                    </form>
+                                    <?php }?>
+                                    
+                                    <!-- <div class="accountState"><?=$AccountState?></div> -->
+                                </div>
+                            </div>
+
+                            <div class="personal-data">
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Full Name: </span><span class="data-value"><?=$different_user_name?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Date of Birth: </span><span class="data-value"><?=$different_user_date_of_birth?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Profile Photo: </span><span class="data-value"><img src="<?=$different_user_pic?>" alt="" width="100px" height="100px"></span></div></div>
+                                </div>
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Contact Number: </span><span class="data-value"><?=$different_user_use_phone_number?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Age: </span><span class="data-value"><?=$different_user_age?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Personal Email Address: </span><span class="data-value"><?=$different_user_username?></span></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each-section">
+                            <div class="title-personal">
+                                <!-- <a href="opportUnity_dashboard_jobseeker.php">
+                                    <button><--</button>
+                                </a> -->
+                                <div class="personal-details"><p>Professional Details</p></div>
+                                
+                            </div>
+                            <div class="personal-data">
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Educational Background: </span><span class="data-value">
+                                        <p><?=$different_user_school?></p>
+                                        <p><?=$different_user_degree?></p>
+                                        <p><?=$different_user_year_graduated?></p>
+                                    </span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>LinkedIn Profile URL: </span><span class="data-value"><?php if(isset($different_user_user_URL))$different_user_user_URL ?></span></div></div>
+                                </div>
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Portfolio Resume Upload: </span><span class="data-value"><img src="<=$different_user_porfolio?>" alt=""></span></div></div>
+
+                                    <!-- ayusinn to mamaya -->
+                                    <div style="width:200px;"><div class="single-data"><span>Work Experience: </span><span class="data-value"><?php if(isset($different_user_company_size))$different_user_company_size ?></span></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each-section">
+                            <div class="title-personal">
+                                <!-- <a href="opportUnity_dashboard_jobseeker.php">
+                                    <button><--</button>
+                                </a> -->
+                                <div class="personal-details"><p>Preferences</p></div>
+                                
+                            </div>
+                            <div class="personal-data">
+                                <div style="width:100%; 
+                                        height:33%; 
+                                        display:flex;
+                                        justify-content:space-between;
+                                        align-items:center;">
+                                    <div style="width:200px;"><div class="single-data"><span>Job Preferences: </span><span class="data-value"><p><?=$different_user_work_schedule_preference?></p></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Desired Industry: </span><span class="data-value"><?=$different_user_desired_industry ?></span></div></div>
+                                </div>
+                                <div style="width:100%; 
+                                        height:33%; 
+                                        display:flex;
+                                        justify-content:space-between;
+                                        align-items:center;">
+                                    <div style="width:200px;"><div class="single-data"><span>Expected Salary: </span><span class="data-value"><?=$different_user_expected_salary_range ?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Willingness Relocate: </span><span class="data-value"><?=$different_user_willingness_to_relocate?></span></div></div>
+                                </div>
+                                <div style="width:100%; 
+                                        height:33%; 
+                                        display:flex;
+                                        justify-content:space-between;
+                                        align-items:center;">
+                                    <div style="width:200px;"><div class="single-data"><span>Work Hiring Preferences: </span><span class="data-value"><?=$different_user_work_schedule_preference ?></span></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- end of if statement ng employee -->
+
+                <?php 
+
+                    } 
+                    else if ($different_user_role == 'employer')
+                    {
+
+                ?>
+                        <div class="each-section">
+                            <div class="title-personal">
+                                <div class="personal-details">
+                                    <p>Personal Details</p>
+                                </div>
+                                <div class="title-personalChild">
+
+                                    <?php 
+                                        if ($edit) 
+                                        {
+                                    ?>
+
+                                        <form action="opportUnity_edit_profile.php" method="POST">
+                                            <input type="hidden" name="role" value="<?=$role?>">
+                                            <input type="hidden" name="user_ID" value="<?=$user_ID?>">
+                                            <button class="editbutton" type="submit">edit profile</button>
+                                        </form>
+                                    <?php 
+                                        }
+                                    ?>
+                                        <div class="accountState"><?=$AccountState?></div>
+                                </div>
+                            </div>
+                            <div class="personal-data">
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Full Name: </span><span class="data-value"><?=$different_user_name?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Date of Birth: </span><span class="data-value"><?=$different_user_date_of_birth?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Profile Photo: </span><span class="data-value"><img src="<?=$different_user_pic?>" alt="" width="100px" height="100px"></span></div></div>
+                                </div>
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Contact Number: </span><span class="data-value"><?=$different_user_use_phone_number?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Age: </span><span class="data-value"><?=$different_user_age?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Personal Email Address: </span><span class="data-value"><?=$different_user_username?></span></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="each-section">
+                            <div class="title-personal">
+                                <div class="personal-details"><p>Company Details</p></div>
+                            </div>
+                            <div class="personal-data">
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Company Address: </span><span class="data-value"></span>
+                                        <?=$different_user_company_address_city?>, 
+                                        <?=$different_user_company_address_province?>, 
+                                        <?=$different_user_company_address_country?>
+                                    </div>
+                                </div>
+                                    <div style="width:200px; "><div class="single-data"><span>Company Website: </span><span class="data-value"><?=$different_user_company_address_URL ?></span></div></div>
+                                </div>
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Industry Type: </span><span class="data-value"><?=$different_user_company_industry_type ?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Company Size: </span><span class="data-value"><?=$different_user_company_size ?></span></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each-section">
+                            <div class="title-personal">
+                                <div class="personal-details"><p>Professional Details</p></div>
+                            </div>
+                            <div class="personal-data">
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>Position in the Company: </span><span class="data-value"><?=$different_user_position_in_company?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Years in Company: </span><span class="data-value"><?=$different_user_years_with_company ?></span></div></div>
+                                </div>
+                                <div class="set-of-data">
+                                    <div style="width:200px;"><div class="single-data"><span>LinkedIn Profile: </span><span class="data-value"><?=$different_user_user_URL ?></span></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="each-section">
+                            <div class="title-personal">
+                                <div class="personal-details"><p>Preferences for Job Postings</p></div>
+                                
+                            </div>
+                            <div class="personal-data">
+                                <div class="set-of-data">
+                                <div style="width:200px;"><div class="single-data"><span>Typical Hiring Budget/Salary Range: </span><span class="data-value"><?=$different_user_salary_range ?></span></div></div>
+                                    <div style="width:200px;"><div class="single-data"><span>Preferred Hiring Location: </span><span class="data-value"><?=$different_user_preferred_hiring_location ?></span></div></div>
+                                </div>
+                                <div class="set-of-data">
+                                </div>
+                            </div>
+                        </div>
+                <?php 
+
+                    }
+            }
+                ?>

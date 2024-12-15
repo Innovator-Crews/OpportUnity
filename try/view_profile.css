@@ -1,0 +1,315 @@
+/* Color palette */
+:root {
+    --nav-bg: #000814;
+    --primary-blue: #001D3D;
+    --secondary-blue: #003566;
+    --highlight-yellow: #FFC300;
+    --accent-yellow: #FFD60A;
+    --white: #F5F5F5;
+    --button: #3F3F40;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.spectral-regular {
+    font-family: "Spectral", serif;
+    font-weight: 700;
+    font-style: normal;
+}  
+
+body {
+    height: 105vh;
+    font-family: "Spectral", serif;
+    background-color: var(--button);
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    z-index: 100;
+    background-color: var(--nav-bg);
+    padding: 15px 30px;
+}
+
+.navbar-left {
+    margin-left: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.navbar img{
+    margin-right: 10px;
+}
+
+.navbar-logo {
+    height: 40px;  
+    width: auto;
+    transition: transform 0.3s ease; 
+    margin-right: 2px; /* space sa logo and opportunity */
+}
+
+.navbar-logo:hover {
+    transform: scale(1.4);  
+}
+
+.navbar .logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 30px; /* space sa opportunity and links */
+    cursor: pointer;
+    transition: color 0.5s ease-in-out;
+}
+
+.navbar .logo:hover{
+    color: var(--accent-yellow);
+}
+
+
+.navbar-left a {
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 50px;
+    margin-left: 20px;
+    white-space: nowrap;
+    width: 80%;;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    font-size: 20px;
+    transition: color 0.5s, background-color 0.5s ease-in-out;
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.nav-links li a:hover {
+    color: var(--secondary-blue);
+    background-color: var(--accent-yellow);
+}
+
+.navbar-right {
+    margin-left: auto;  
+    color: white;
+    font-size: 18px;
+    padding-right: 20px;
+    justify-content: space-between;
+    display: flex; /* Ensures it's displayed properly alongside the button */
+    align-items: center; /* Vertically aligns the content (username and button) */
+}
+
+#userName {
+    margin-right: 5px; /* Adds spacing between the username and logout button */
+    cursor: pointer;
+}
+
+#userName span {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:var(--white);
+    width: 250px;
+    text-decoration: none;
+    transition: color 0.5 ease-in-out;
+}
+
+#userName:hover {
+    color:var(--accent-yellow);
+}
+
+#dropdown {
+    display: none; 
+    /* display: block !important; Force visibility for debugging */
+    position: absolute;
+    top: 60px;
+    right: 200px;
+    background-color: #333;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+#dropdown a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+#dropdown a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.show {
+    display: block;
+}
+
+img{
+    height: 40px;;
+    width: 40px;
+    border-radius:50%;
+}
+
+#logoutBtn {
+    background-color: #ff4d4d; /* Reddish color */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    margin-left: 15px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#logoutBtn:hover {
+    background-color: #e60000; /* Darker red on hover */
+}
+
+.title {
+    text-align: center;
+    width: 30%;
+    margin: 20px 20px;
+    padding: 20px 30px;
+    color: var(--accent-yellow);
+    background-color: var(--secondary-blue);
+    border: 5px solid var(--accent-yellow);
+    border-radius: 20px;
+}
+
+
+.container {
+    width: 100%;
+    margin: auto;
+    padding: 20px;
+    display: flex; /* or use flex/grid to hold items */
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.profile-header button {
+    padding: 10px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    padding: 10px 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    margin: 20px 20px;
+    transition: all 0.5s ease-in-out;
+    font-weight: 500;
+}
+
+.profile-header button:hover {
+    background-color: var(--accent-yellow);
+    color: var(--primary-blue);
+}
+
+.account-state {
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: lime;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    padding: 10px;
+}
+
+/* Profile Cards */
+.profile-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 30px;
+
+}
+
+.card {
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 50vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.5s ease; /* Smooth transition for all effects */
+    border: 5px solid var(--white);
+}
+
+.card:hover {
+    border: 5px solid var(--accent-yellow);
+    background-color: var(--primary-blue); /* Subtle background color change */
+    transform: scale(1.10); /* Slight zoom-in effect */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+}
+
+.card h1, .card p, .card:hover h4 {
+    transition: color 0.3s ease; /* Smooth text color transition */
+}
+
+.card:hover h1, .card:hover p, .card:hover h4 {
+    color: #e5e5e5; /* Darken text color slightly on hover */
+}
+
+.card h4 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.card p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.edit-profile-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.edit-profile-btn:hover {
+    background-color: #0056b3;
+}

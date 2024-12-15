@@ -1,0 +1,247 @@
+/* Color palette */
+:root {
+    --nav-bg: #000814;
+    --primary-blue: #001D3D;
+    --secondary-blue: #003566;
+    --highlight-yellow: #FFC300;
+    --accent-yellow: #FFD60A;
+    --white: #F5F5F5;
+    --button: ##002152;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.spectral-regular {
+    font-family: "Spectral", serif;
+    font-weight: 700;
+    font-style: normal;
+}  
+
+body {
+    height: 105vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    font-family: "Spectral", serif;
+    background-color: var(--primary-blue);
+    color: var(--accent-yellow);
+}
+
+
+.navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    z-index: 100;
+    background-color: var(--nav-bg);
+    padding: 15px 30px;
+}
+
+.navbar-left {
+    margin-left: 2%;
+    display: flex;
+    align-items: center;
+}
+
+.navbar img{
+    margin-right: 10px;
+}
+
+.navbar-logo {
+    height: 40px;  
+    width: auto;
+    transition: transform 0.5s ease; 
+    margin-right: 2px; /* space sa logo and opportunity */
+}
+
+.navbar-logo:hover {
+    transform: scale(1.4);  
+}
+
+.navbar .logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 30px; /* space sa opportunity and links */
+    cursor: pointer;
+    transition: color 0.5s ease-in-out;
+}
+
+.navbar .logo:hover{
+    color: var(--accent-yellow);
+}
+
+.navbar-left a {
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 50px;
+    margin-left: 80px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    font-size: 20px;
+    transition: color 0.5s, background-color 0.5s ease-in-out;
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.nav-links li a:hover {
+    color: var(--secondary-blue);
+    background-color: var(--accent-yellow);
+}
+
+.background-image {
+    position: relative;
+    background: url('testbg1.jpg') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glass-effect {
+    height: 70vh;
+    width: 80vw;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 50px 5px;
+    text-align: center;
+    backdrop-filter: blur(1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+    transition: transform 0.7s ease-in-out;
+    background: rgba(0, 8, 20, 0.6);
+    color: var(--accent-yellow);
+    border: 2px solid var(--primary-blue);
+}
+ 
+.glass-effect h1 {
+    margin: 100px 0 10px 0;
+    font-size: 3em;
+    padding: 10px 0;
+    color: var(--secondary-blue);
+    transition: transform 0.5s ease-in-out, color 0.5s ease-in-out;
+}
+
+.glass-effect:hover{
+    transform: scale(1.1);
+}
+
+.glass-effect:hover h1{
+    color: var(--accent-yellow);
+}
+
+
+.glass-effect button {
+    background-color: var(--primary-blue);
+    border: none;
+    width: 200px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    letter-spacing: 3px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.glass-effect button:hover {
+    background-color: var(--secondary-blue);
+}
+
+.glass-effect h3 {
+    margin: 10px 0 0 0;
+    font-size: 2.5em;
+    padding: 10px 0;
+    color: #ffffff;
+}
+
+.glass-effect p {
+    margin-bottom: 50px;
+    font-size: 1.2em;
+    color: #ffffff;
+}
+
+.cards-section {
+    text-align: center;
+    margin: 50px 0;
+    color: #1e6992b6;
+}
+
+.cards-section h2 {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    transition: transform 0.5s ease-in-out;
+}
+
+.cards-section:hover .cs-header{
+    transform: scale(1.1);
+    color: #1E6992;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 100px;
+    margin-top: 20px;
+}
+
+.card {
+    margin-bottom: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    text-align: center;
+    width: 300px;
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    border: #F5F5F5 5px solid;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card h2 {
+    font-size: 1.5em;
+    margin: 15px 0;
+    color: #1e6992b6;
+}
+
+.card p {
+    padding: 0 15px 15px 15px;
+    font-size: 1em;
+    color: #333;
+    flex-grow: 1;
+}
+
+.card:hover {
+    transform: scale(1.1);
+    border-color: var(--highlight-yellow);
+}
+
+.card:hover h2 {
+    color: #1E6992;
+}
