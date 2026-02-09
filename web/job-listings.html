@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="faviconlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body data-page="job-listings">
   <div class="page">
@@ -30,7 +30,30 @@
     </nav>
 
     <div class="container">
-      <h2>Job Listings</h2>
+      <div class="actions-row">
+        <div>
+          <span class="pill">Live roles</span>
+          <h2>Job Listings</h2>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Updated today</span>
+          <span class="tag">Remote ready</span>
+          <span class="tag">Fast apply</span>
+        </div>
+      </div>
+
+      <div class="panel reveal">
+        <h3>Quick filters</h3>
+        <p>Explore trending roles or narrow the focus by work style.</p>
+        <div class="tag-row">
+          <span class="tag">Design</span>
+          <span class="tag">Engineering</span>
+          <span class="tag">Operations</span>
+          <span class="tag">Marketing</span>
+          <span class="tag">Sales</span>
+        </div>
+      </div>
+
       <div id="jobseeker-empty" class="notice hidden">No job posts available at the moment.</div>
       <div id="jobseeker-jobs" class="grid-two"></div>
     </div>

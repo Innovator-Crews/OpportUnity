@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="faviconlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body data-page="employer">
   <div class="page">
@@ -31,9 +31,33 @@
 
     <div class="container">
       <div class="actions-row">
-        <h2>Employer Dashboard</h2>
+        <div>
+          <span class="pill">Employer hub</span>
+          <h2>Employer Dashboard</h2>
+        </div>
         <a class="btn" href="post-job.html">Post a job</a>
       </div>
+
+      <div class="grid-two">
+        <div class="panel reveal">
+          <h3>Pipeline snapshot</h3>
+          <p>See the health of your open roles and candidate responses.</p>
+          <div class="tag-row">
+            <span class="tag">3 active roles</span>
+            <span class="tag">18 applicants</span>
+            <span class="tag">5 interviews</span>
+          </div>
+        </div>
+        <div class="panel reveal delay-1">
+          <h3>Next best actions</h3>
+          <p>Follow up on top candidates and refresh role descriptions weekly.</p>
+          <div class="tag-row">
+            <span class="tag">Send 2 follow ups</span>
+            <span class="tag">Refresh salary range</span>
+          </div>
+        </div>
+      </div>
+
       <div id="employer-empty" class="notice hidden">No job posts yet. Create your first job post.</div>
       <div id="employer-jobs" class="grid-two"></div>
     </div>

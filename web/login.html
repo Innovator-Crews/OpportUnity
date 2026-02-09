@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="faviconlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body data-page="login">
   <div class="page">
@@ -30,23 +30,38 @@
     </nav>
 
     <div class="container">
-      <div class="form-card">
-        <h2>Access your account</h2>
-        <p>Welcome back, OpportUnity is waiting.</p>
-        <div id="env-warning" class="notice hidden">Firebase is not configured yet.</div>
-        <div id="login-error" class="notice hidden"></div>
-        <form id="login-form">
-          <div class="input-group">
-            <label for="login-email">Email</label>
-            <input type="email" id="login-email" required>
+      <div class="split-layout">
+        <div class="form-card reveal">
+          <span class="pill">Member access</span>
+          <h2>Access your account</h2>
+          <p>Welcome back, OpportUnity is waiting.</p>
+          <div id="env-warning" class="notice hidden">Firebase is not configured yet.</div>
+          <div id="login-error" class="notice hidden"></div>
+          <form id="login-form">
+            <div class="input-group">
+              <label for="login-email">Email</label>
+              <input type="email" id="login-email" required>
+            </div>
+            <div class="input-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" required>
+            </div>
+            <button class="btn" type="submit">Sign in</button>
+          </form>
+          <p>New here? <a class="inline-link" href="signup.html">Create an account</a></p>
+        </div>
+        <div class="panel reveal delay-1">
+          <h3>Why teams choose OpportUnity</h3>
+          <p>Stay focused with a single workspace for applicants, roles, and follow ups.</p>
+          <div class="section-divider"></div>
+          <div class="tag-row">
+            <span class="tag">Role match score</span>
+            <span class="tag">Fast apply</span>
+            <span class="tag">Hiring insights</span>
           </div>
-          <div class="input-group">
-            <label for="login-password">Password</label>
-            <input type="password" id="login-password" required>
-          </div>
-          <button class="btn" type="submit">Sign in</button>
-        </form>
-        <p>New here? <a class="inline-link" href="signup.html">Create an account</a></p>
+          <div class="section-divider"></div>
+          <p><strong>Tip:</strong> Keep your profile updated to surface more relevant roles.</p>
+        </div>
       </div>
     </div>
   </div>

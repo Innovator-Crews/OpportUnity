@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="faviconlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body data-page="edit-job">
   <div class="page">
@@ -30,44 +30,59 @@
     </nav>
 
     <div class="container">
-      <div class="form-card">
-        <h2>Edit job</h2>
-        <div id="edit-job-error" class="notice hidden"></div>
-        <form id="edit-job-form">
-          <div class="input-group">
-            <label for="job-title">Job title</label>
-            <input type="text" id="job-title" required>
+      <div class="split-layout">
+        <div class="form-card reveal">
+          <span class="pill">Update role</span>
+          <h2>Edit job</h2>
+          <div id="edit-job-error" class="notice hidden"></div>
+          <form id="edit-job-form">
+            <div class="input-group">
+              <label for="job-title">Job title</label>
+              <input type="text" id="job-title" required>
+            </div>
+            <div class="input-group">
+              <label for="company-name">Company name</label>
+              <input type="text" id="company-name" required>
+            </div>
+            <div class="input-group">
+              <label for="job-location">Location</label>
+              <input type="text" id="job-location" required>
+            </div>
+            <div class="input-group">
+              <label for="job-description">Job description</label>
+              <textarea id="job-description" rows="4" required></textarea>
+            </div>
+            <div class="input-group">
+              <label for="salary">Salary</label>
+              <input type="text" id="salary" required>
+            </div>
+            <div class="input-group">
+              <label for="requirements">Requirements</label>
+              <textarea id="requirements" rows="3" required></textarea>
+            </div>
+            <div class="input-group">
+              <label for="qualities">Qualities</label>
+              <textarea id="qualities" rows="3" required></textarea>
+            </div>
+            <div class="input-group">
+              <label for="expectations">Expectations</label>
+              <textarea id="expectations" rows="3" required></textarea>
+            </div>
+            <button class="btn" type="submit">Update job</button>
+          </form>
+        </div>
+        <div class="panel reveal delay-1">
+          <h3>Keep listings fresh</h3>
+          <p>Updated roles get boosted and appear in more searches.</p>
+          <div class="section-divider"></div>
+          <div class="tag-row">
+            <span class="tag">Refresh location</span>
+            <span class="tag">Recheck benefits</span>
+            <span class="tag">Clarify expectations</span>
           </div>
-          <div class="input-group">
-            <label for="company-name">Company name</label>
-            <input type="text" id="company-name" required>
-          </div>
-          <div class="input-group">
-            <label for="job-location">Location</label>
-            <input type="text" id="job-location" required>
-          </div>
-          <div class="input-group">
-            <label for="job-description">Job description</label>
-            <textarea id="job-description" rows="4" required></textarea>
-          </div>
-          <div class="input-group">
-            <label for="salary">Salary</label>
-            <input type="text" id="salary" required>
-          </div>
-          <div class="input-group">
-            <label for="requirements">Requirements</label>
-            <textarea id="requirements" rows="3" required></textarea>
-          </div>
-          <div class="input-group">
-            <label for="qualities">Qualities</label>
-            <textarea id="qualities" rows="3" required></textarea>
-          </div>
-          <div class="input-group">
-            <label for="expectations">Expectations</label>
-            <textarea id="expectations" rows="3" required></textarea>
-          </div>
-          <button class="btn" type="submit">Update job</button>
-        </form>
+          <div class="section-divider"></div>
+          <p><strong>Tip:</strong> Mention tools and outcomes to improve match quality.</p>
+        </div>
       </div>
     </div>
   </div>

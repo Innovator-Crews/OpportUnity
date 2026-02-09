@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="faviconlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body data-page="jobseeker">
   <div class="page">
@@ -30,7 +30,38 @@
     </nav>
 
     <div class="container">
-      <h2>Available Jobs</h2>
+      <div class="actions-row">
+        <div>
+          <span class="pill">Job seeker hub</span>
+          <h2>Available Jobs</h2>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Personalized</span>
+          <span class="tag">Verified employers</span>
+          <span class="tag">Shortlist ready</span>
+        </div>
+      </div>
+
+      <div class="grid-two">
+        <div class="panel reveal">
+          <h3>Weekly insights</h3>
+          <p>Stay ahead with new roles matched to your profile and skill growth plan.</p>
+          <div class="tag-row">
+            <span class="tag">12 new matches</span>
+            <span class="tag">4 saved roles</span>
+            <span class="tag">2 interviews</span>
+          </div>
+        </div>
+        <div class="panel reveal delay-1">
+          <h3>Next steps</h3>
+          <p>Update your profile and add recent projects to boost visibility.</p>
+          <div class="tag-row">
+            <span class="tag">Add portfolio</span>
+            <span class="tag">Set salary range</span>
+          </div>
+        </div>
+      </div>
+
       <div id="jobseeker-empty" class="notice hidden">No job posts available at the moment.</div>
       <div id="jobseeker-jobs" class="grid-two"></div>
     </div>
