@@ -89,6 +89,10 @@ function setNavState(user, profile) {
   }
 }
 
+function getApplicationId(jobId, userId) {
+  return `${jobId}_${userId}`;
+}
+
 function setNotice(element, message) {
   if (!element) {
     return;
@@ -378,7 +382,8 @@ async function initJobseekerDashboard() {
         messageBox.classList.remove("hidden");
         return;
       }
-      await addDoc(collection(db, "job_applications"), {
+      const applicationId = getApplicationId(job.id, user.uid);
+      await setDoc(doc(db, "job_applications", applicationId), {
         jobId: job.id,
         userId: user.uid,
         createdAt: serverTimestamp()
@@ -390,13 +395,9 @@ async function initJobseekerDashboard() {
 }
 
 async function hasApplied(jobId, userId) {
-  const appQuery = query(
-    collection(db, "job_applications"),
-    where("jobId", "==", jobId),
-    where("userId", "==", userId)
-  );
-  const appSnapshot = await getDocs(appQuery);
-  return appSnapshot.docs.length > 0;
+  const applicationId = getApplicationId(jobId, userId);
+  const appSnap = await getDoc(doc(db, "job_applications", applicationId));
+  return appSnap.exists();
 }
 
 async function initPostJob() {

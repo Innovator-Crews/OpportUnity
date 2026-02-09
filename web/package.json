@@ -1,0 +1,8 @@
+{
+  "name": "opportunity-static",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build:config": "node scripts/generate-firebase-config.js"
+  }
+}
