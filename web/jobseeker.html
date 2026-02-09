@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobseeker Dashboard - OpportUnity</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="icon" type="image/png" href="faviconlogo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
+</head>
+<body data-page="jobseeker">
+  <div class="page">
+    <nav class="navbar">
+      <div class="navbar-left">
+        <a href="index.html"><img src="logo.png" alt="OpportUnity Logo" class="navbar-logo"></a>
+        <a href="index.html"><div class="logo">OpportUnity</div></a>
+        <ul class="nav-links">
+          <li><a href="index.html">Landing Page</a></li>
+          <li><a href="#">Terms &amp; Condition</a></li>
+        </ul>
+      </div>
+      <div class="nav-actions">
+        <span id="user-greeting" class="hidden"></span>
+        <a id="login-link" class="btn secondary" href="login.html">Login</a>
+        <a id="signup-link" class="btn" href="signup.html">Sign up</a>
+        <button id="logout-btn" class="btn secondary hidden" type="button">Logout</button>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h2>Available Jobs</h2>
+      <div id="jobseeker-empty" class="notice hidden">No job posts available at the moment.</div>
+      <div id="jobseeker-jobs" class="grid-two"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
