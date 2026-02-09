@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "build:config": "node scripts/generate-firebase-config.js"
+    "build:config": "node scripts/generate-firebase-config.js",
+    "config": "node scripts/generate-firebase-config.js",
+    "setup": "node scripts/generate-firebase-config.js"
   }
 }

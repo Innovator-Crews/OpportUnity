@@ -105,6 +105,92 @@ function setNotice(element, message) {
   }
 }
 
+function setLoadingState(element, isLoading, label) {
+  if (!element) {
+    return;
+  }
+  element.classList.toggle("hidden", !isLoading);
+  const textEl = element.querySelector("[data-loading-text]");
+  if (textEl && label) {
+    textEl.textContent = label;
+  }
+}
+
+function setButtonLoading(button, isLoading, label) {
+  if (!button) {
+    return;
+  }
+  if (isLoading) {
+    if (!button.dataset.originalText) {
+      button.dataset.originalText = button.textContent;
+    }
+    button.textContent = label || "Loading...";
+    button.disabled = true;
+  } else {
+    button.textContent = button.dataset.originalText || button.textContent;
+    button.disabled = false;
+  }
+}
+
+function normalizeText(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function getAuthErrorMessage(error) {
+  const code = error?.code || "";
+  const messages = {
+    "auth/invalid-email": "Please enter a valid email address.",
+    "auth/user-disabled": "This account has been disabled.",
+    "auth/user-not-found": "No account found for this email.",
+    "auth/wrong-password": "Incorrect password. Please try again.",
+    "auth/email-already-in-use": "An account already exists for this email.",
+    "auth/weak-password": "Password must be at least 6 characters.",
+    "auth/too-many-requests": "Too many attempts. Please wait and try again."
+  };
+  return messages[code] || "Something went wrong. Please try again.";
+}
+
+function validateJobForm(values) {
+  if (!values.jobTitle || values.jobTitle.length < 2) {
+    return "Job title must be at least 2 characters.";
+  }
+  if (!values.companyName || values.companyName.length < 2) {
+    return "Company name must be at least 2 characters.";
+  }
+  if (!values.jobLocation || values.jobLocation.length < 2) {
+    return "Location must be at least 2 characters.";
+  }
+  if (!values.jobDescription || values.jobDescription.length < 20) {
+    return "Job description must be at least 20 characters.";
+  }
+  if (!values.salary) {
+    return "Salary is required.";
+  }
+  if (!values.requirements || values.requirements.length < 3) {
+    return "Requirements must be at least 3 characters.";
+  }
+  if (!values.qualities || values.qualities.length < 3) {
+    return "Qualities must be at least 3 characters.";
+  }
+  if (!values.expectations || values.expectations.length < 3) {
+    return "Expectations must be at least 3 characters.";
+  }
+  return "";
+}
+
 function requireFirebaseReady() {
   if (!firebaseReady || !auth || !db) {
     throw new Error("Firebase not configured");
@@ -150,6 +236,7 @@ function requireAuth(requiredRole) {
 async function initLogin() {
   const form = document.getElementById("login-form");
   const errorBox = document.getElementById("login-error");
+  const submitButton = form ? form.querySelector("button[type='submit']") : null;
 
   if (!form) {
     return;
@@ -178,10 +265,23 @@ async function initLogin() {
     const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
 
+    if (!email || !isValidEmail(email)) {
+      setNotice(errorBox, "Please enter a valid email address.");
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      setNotice(errorBox, "Password must be at least 6 characters.");
+      return;
+    }
+
     try {
+      setButtonLoading(submitButton, true, "Signing in...");
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      setNotice(errorBox, "Login failed. Check your email and password.");
+      setNotice(errorBox, getAuthErrorMessage(error));
+    } finally {
+      setButtonLoading(submitButton, false);
     }
   });
 }
@@ -189,6 +289,7 @@ async function initLogin() {
 async function initSignup() {
   const form = document.getElementById("signup-form");
   const errorBox = document.getElementById("signup-error");
+  const submitButton = form ? form.querySelector("button[type='submit']") : null;
 
   if (!form) {
     return;
@@ -221,12 +322,38 @@ async function initSignup() {
     const confirmPassword = document.getElementById("signup-confirm-password").value;
     const role = document.getElementById("signup-role").value;
 
+    if (!firstName || firstName.length < 2) {
+      setNotice(errorBox, "First name must be at least 2 characters.");
+      return;
+    }
+
+    if (!lastName || lastName.length < 2) {
+      setNotice(errorBox, "Last name must be at least 2 characters.");
+      return;
+    }
+
+    if (!email || !isValidEmail(email)) {
+      setNotice(errorBox, "Please enter a valid email address.");
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      setNotice(errorBox, "Password must be at least 6 characters.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setNotice(errorBox, "Passwords do not match.");
       return;
     }
 
+    if (!role) {
+      setNotice(errorBox, "Please select a role.");
+      return;
+    }
+
     try {
+      setButtonLoading(submitButton, true, "Creating account...");
       const credential = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", credential.user.uid), {
         firstName,
@@ -236,7 +363,9 @@ async function initSignup() {
       });
       window.location.href = role === "employer" ? "employer.html" : "jobseeker.html";
     } catch (error) {
-      setNotice(errorBox, "Signup failed. Please try again.");
+      setNotice(errorBox, getAuthErrorMessage(error));
+    } finally {
+      setButtonLoading(submitButton, false);
     }
   });
 }
@@ -244,19 +373,35 @@ async function initSignup() {
 async function initEmployerDashboard() {
   const jobsContainer = document.getElementById("employer-jobs");
   const emptyNotice = document.getElementById("employer-empty");
+  const loadingPanel = document.getElementById("employer-loading");
 
   if (!jobsContainer) {
     return;
   }
 
-  const { user } = await requireAuth("employer");
+  let user;
+  try {
+    setLoadingState(loadingPanel, true, "Loading your roles...");
+    ({ user } = await requireAuth("employer"));
+  } catch (error) {
+    setNotice(emptyNotice, "Unable to load your jobs right now.");
+    return;
+  }
 
   const jobQuery = query(
     collection(db, "job_posts"),
     where("employerId", "==", user.uid),
     orderBy("createdAt", "desc")
   );
-  const jobSnapshot = await getDocs(jobQuery);
+  let jobSnapshot;
+  try {
+    jobSnapshot = await getDocs(jobQuery);
+  } catch (error) {
+    setNotice(emptyNotice, "Unable to load your jobs right now.");
+    return;
+  } finally {
+    setLoadingState(loadingPanel, false);
+  }
   const jobs = jobSnapshot.docs.map((docSnap) => ({
     id: docSnap.id,
     ...docSnap.data()
@@ -266,18 +411,29 @@ async function initEmployerDashboard() {
     emptyNotice.classList.remove("hidden");
   }
 
+  jobsContainer.innerHTML = "";
+
   for (const job of jobs) {
+    const safeJobTitle = escapeHtml(job.jobTitle);
+    const safeCompany = escapeHtml(job.companyName);
+    const safeLocation = escapeHtml(job.jobLocation);
+    const safeSalary = escapeHtml(job.salary);
+    const safeDescription = escapeHtml(job.jobDescription);
+    const safeRequirements = escapeHtml(job.requirements);
+    const safeQualities = escapeHtml(job.qualities);
+    const safeExpectations = escapeHtml(job.expectations);
+
     const jobCard = document.createElement("div");
     jobCard.className = "job-card";
     jobCard.innerHTML = `
-      <h3>${job.jobTitle}</h3>
-      <p><strong>Company:</strong> ${job.companyName}</p>
-      <p><strong>Location:</strong> ${job.jobLocation}</p>
-      <p><strong>Salary:</strong> ${job.salary}</p>
-      <p><strong>Description:</strong> ${job.jobDescription}</p>
-      <p><strong>Requirements:</strong> ${job.requirements}</p>
-      <p><strong>Qualities:</strong> ${job.qualities}</p>
-      <p><strong>Expectations:</strong> ${job.expectations}</p>
+      <h3>${safeJobTitle}</h3>
+      <p><strong>Company:</strong> ${safeCompany}</p>
+      <p><strong>Location:</strong> ${safeLocation}</p>
+      <p><strong>Salary:</strong> ${safeSalary}</p>
+      <p><strong>Description:</strong> ${safeDescription}</p>
+      <p><strong>Requirements:</strong> ${safeRequirements}</p>
+      <p><strong>Qualities:</strong> ${safeQualities}</p>
+      <p><strong>Expectations:</strong> ${safeExpectations}</p>
       <div class="actions-row">
         <a class="btn secondary" href="edit-job.html?jobId=${job.id}">Edit</a>
         <button class="btn secondary" data-delete="${job.id}">Delete</button>
@@ -295,9 +451,16 @@ async function initEmployerDashboard() {
       if (!confirmed) {
         return;
       }
-      await deleteDoc(doc(db, "job_posts", job.id));
-      await deleteApplicationsForJob(job.id);
-      jobCard.remove();
+      try {
+        setButtonLoading(deleteButton, true, "Deleting...");
+        await deleteDoc(doc(db, "job_posts", job.id));
+        await deleteApplicationsForJob(job.id);
+        jobCard.remove();
+      } catch (error) {
+        setNotice(emptyNotice, "Unable to delete that job right now.");
+      } finally {
+        setButtonLoading(deleteButton, false);
+      }
     });
 
     const list = jobCard.querySelector(`#applicants-${job.id}`);
@@ -307,7 +470,16 @@ async function initEmployerDashboard() {
 
 async function renderApplicants(jobId, list) {
   const appQuery = query(collection(db, "job_applications"), where("jobId", "==", jobId));
-  const appSnapshot = await getDocs(appQuery);
+  let appSnapshot;
+
+  try {
+    appSnapshot = await getDocs(appQuery);
+  } catch (error) {
+    const item = document.createElement("li");
+    item.textContent = "Unable to load applicants.";
+    list.appendChild(item);
+    return;
+  }
 
   if (!appSnapshot.docs.length) {
     const item = document.createElement("li");
@@ -321,7 +493,10 @@ async function renderApplicants(jobId, list) {
     const userProfile = await getProfile(appData.userId);
     const item = document.createElement("li");
     if (userProfile) {
-      item.textContent = `${userProfile.firstName} ${userProfile.lastName} - ${userProfile.email}`;
+      const firstName = escapeHtml(userProfile.firstName);
+      const lastName = escapeHtml(userProfile.lastName);
+      const email = escapeHtml(userProfile.email);
+      item.textContent = `${firstName} ${lastName} - ${email}`;
     } else {
       item.textContent = appData.userId;
     }
@@ -340,58 +515,130 @@ async function deleteApplicationsForJob(jobId) {
 async function initJobseekerDashboard() {
   const jobsContainer = document.getElementById("jobseeker-jobs");
   const emptyNotice = document.getElementById("jobseeker-empty");
+  const loadingPanel = document.getElementById("jobs-loading");
+  const searchInput = document.getElementById("job-search");
+  const locationInput = document.getElementById("job-location-filter");
+  const clearFiltersButton = document.getElementById("job-filter-clear");
+  const resultsCount = document.getElementById("job-results-count");
 
   if (!jobsContainer) {
     return;
   }
 
-  const { user } = await requireAuth("employee");
+  let user;
+  try {
+    setLoadingState(loadingPanel, true, "Loading roles...");
+    ({ user } = await requireAuth("employee"));
+  } catch (error) {
+    setNotice(emptyNotice, "Unable to load roles right now.");
+    return;
+  }
 
   const jobQuery = query(collection(db, "job_posts"), orderBy("createdAt", "desc"));
-  const jobSnapshot = await getDocs(jobQuery);
+  let jobSnapshot;
+  try {
+    jobSnapshot = await getDocs(jobQuery);
+  } catch (error) {
+    setNotice(emptyNotice, "Unable to load roles right now.");
+    return;
+  } finally {
+    setLoadingState(loadingPanel, false);
+  }
   const jobs = jobSnapshot.docs.map((docSnap) => ({
     id: docSnap.id,
     ...docSnap.data()
   }));
 
-  if (!jobs.length && emptyNotice) {
-    emptyNotice.classList.remove("hidden");
-  }
+  const renderJobs = async (jobsToRender) => {
+    jobsContainer.innerHTML = "";
+    if (!jobsToRender.length && emptyNotice) {
+      emptyNotice.classList.remove("hidden");
+    } else if (emptyNotice) {
+      emptyNotice.classList.add("hidden");
+    }
 
-  for (const job of jobs) {
-    const jobCard = document.createElement("div");
-    jobCard.className = "job-card";
-    jobCard.innerHTML = `
-      <h3>${job.jobTitle}</h3>
-      <p><strong>Description:</strong> ${job.jobDescription}</p>
-      <p><strong>Requirements:</strong> ${job.requirements}</p>
-      <p><strong>Qualifications:</strong> ${job.qualities}</p>
-      <p><strong>Expectations:</strong> ${job.expectations}</p>
-      <button class="btn" data-apply="${job.id}">Apply Now</button>
-      <div class="notice hidden" id="apply-msg-${job.id}"></div>
-    `;
-    jobsContainer.appendChild(jobCard);
+    if (resultsCount) {
+      resultsCount.textContent = `${jobsToRender.length} role${jobsToRender.length === 1 ? "" : "s"}`;
+    }
 
-    const applyButton = jobCard.querySelector(`[data-apply="${job.id}"]`);
-    const messageBox = jobCard.querySelector(`#apply-msg-${job.id}`);
+    for (const job of jobsToRender) {
+      const jobCard = document.createElement("div");
+      jobCard.className = "job-card";
+      jobCard.innerHTML = `
+        <h3>${escapeHtml(job.jobTitle)}</h3>
+        <p><strong>Description:</strong> ${escapeHtml(job.jobDescription)}</p>
+        <p><strong>Requirements:</strong> ${escapeHtml(job.requirements)}</p>
+        <p><strong>Qualifications:</strong> ${escapeHtml(job.qualities)}</p>
+        <p><strong>Expectations:</strong> ${escapeHtml(job.expectations)}</p>
+        <button class="btn" data-apply="${job.id}">Apply Now</button>
+        <div class="notice hidden" id="apply-msg-${job.id}"></div>
+      `;
+      jobsContainer.appendChild(jobCard);
 
-    applyButton.addEventListener("click", async () => {
-      const alreadyApplied = await hasApplied(job.id, user.uid);
-      if (alreadyApplied) {
-        messageBox.textContent = "You already applied to this job.";
-        messageBox.classList.remove("hidden");
-        return;
-      }
-      const applicationId = getApplicationId(job.id, user.uid);
-      await setDoc(doc(db, "job_applications", applicationId), {
-        jobId: job.id,
-        userId: user.uid,
-        createdAt: serverTimestamp()
+      const applyButton = jobCard.querySelector(`[data-apply="${job.id}"]`);
+      const messageBox = jobCard.querySelector(`#apply-msg-${job.id}`);
+
+      applyButton.addEventListener("click", async () => {
+        try {
+          setButtonLoading(applyButton, true, "Applying...");
+          const alreadyApplied = await hasApplied(job.id, user.uid);
+          if (alreadyApplied) {
+            messageBox.textContent = "You already applied to this job.";
+            messageBox.classList.remove("hidden");
+            return;
+          }
+          const applicationId = getApplicationId(job.id, user.uid);
+          await setDoc(doc(db, "job_applications", applicationId), {
+            jobId: job.id,
+            userId: user.uid,
+            createdAt: serverTimestamp()
+          });
+          messageBox.textContent = "Application submitted!";
+          messageBox.classList.remove("hidden");
+        } catch (error) {
+          messageBox.textContent = "Unable to submit application right now.";
+          messageBox.classList.remove("hidden");
+        } finally {
+          setButtonLoading(applyButton, false);
+        }
       });
-      messageBox.textContent = "Application submitted!";
-      messageBox.classList.remove("hidden");
+    }
+  };
+
+  const applyFilters = () => {
+    const searchValue = normalizeText(searchInput?.value);
+    const locationValue = normalizeText(locationInput?.value);
+
+    const filtered = jobs.filter((job) => {
+      const haystack = normalizeText(
+        `${job.jobTitle} ${job.companyName} ${job.jobDescription} ${job.requirements} ${job.qualities} ${job.expectations}`
+      );
+      const location = normalizeText(job.jobLocation);
+
+      const matchesSearch = !searchValue || haystack.includes(searchValue);
+      const matchesLocation = !locationValue || location.includes(locationValue);
+
+      return matchesSearch && matchesLocation;
+    });
+
+    renderJobs(filtered);
+  };
+
+  if (searchInput || locationInput || clearFiltersButton) {
+    searchInput?.addEventListener("input", applyFilters);
+    locationInput?.addEventListener("input", applyFilters);
+    clearFiltersButton?.addEventListener("click", () => {
+      if (searchInput) {
+        searchInput.value = "";
+      }
+      if (locationInput) {
+        locationInput.value = "";
+      }
+      applyFilters();
     });
   }
+
+  await renderJobs(jobs);
 }
 
 async function hasApplied(jobId, userId) {
@@ -403,12 +650,19 @@ async function hasApplied(jobId, userId) {
 async function initPostJob() {
   const form = document.getElementById("post-job-form");
   const errorBox = document.getElementById("post-job-error");
+  const submitButton = form ? form.querySelector("button[type='submit']") : null;
 
   if (!form) {
     return;
   }
 
-  const { user } = await requireAuth("employer");
+  let user;
+  try {
+    ({ user } = await requireAuth("employer"));
+  } catch (error) {
+    setNotice(errorBox, "You need an employer account to post jobs.");
+    return;
+  }
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -423,13 +677,7 @@ async function initPostJob() {
     const qualities = document.getElementById("qualities").value.trim();
     const expectations = document.getElementById("expectations").value.trim();
 
-    if (!jobTitle || !companyName || !jobLocation || !jobDescription) {
-      setNotice(errorBox, "All fields are required.");
-      return;
-    }
-
-    await addDoc(collection(db, "job_posts"), {
-      employerId: user.uid,
+    const validationMessage = validateJobForm({
       jobTitle,
       companyName,
       jobLocation,
@@ -437,23 +685,54 @@ async function initPostJob() {
       salary,
       requirements,
       qualities,
-      expectations,
-      createdAt: serverTimestamp()
+      expectations
     });
 
-    window.location.href = "employer.html";
+    if (validationMessage) {
+      setNotice(errorBox, validationMessage);
+      return;
+    }
+
+    try {
+      setButtonLoading(submitButton, true, "Posting...");
+      await addDoc(collection(db, "job_posts"), {
+        employerId: user.uid,
+        jobTitle,
+        companyName,
+        jobLocation,
+        jobDescription,
+        salary,
+        requirements,
+        qualities,
+        expectations,
+        createdAt: serverTimestamp()
+      });
+
+      window.location.href = "employer.html";
+    } catch (error) {
+      setNotice(errorBox, "Unable to post this job right now.");
+    } finally {
+      setButtonLoading(submitButton, false);
+    }
   });
 }
 
 async function initEditJob() {
   const form = document.getElementById("edit-job-form");
   const errorBox = document.getElementById("edit-job-error");
+  const submitButton = form ? form.querySelector("button[type='submit']") : null;
 
   if (!form) {
     return;
   }
 
-  const { user } = await requireAuth("employer");
+  let user;
+  try {
+    ({ user } = await requireAuth("employer"));
+  } catch (error) {
+    setNotice(errorBox, "You need an employer account to edit jobs.");
+    return;
+  }
   const params = new URLSearchParams(window.location.search);
   const jobId = params.get("jobId");
 
@@ -463,7 +742,13 @@ async function initEditJob() {
   }
 
   const jobRef = doc(db, "job_posts", jobId);
-  const jobSnap = await getDoc(jobRef);
+  let jobSnap;
+  try {
+    jobSnap = await getDoc(jobRef);
+  } catch (error) {
+    setNotice(errorBox, "Unable to load this job right now.");
+    return;
+  }
 
   if (!jobSnap.exists()) {
     setNotice(errorBox, "Job not found.");
@@ -489,17 +774,49 @@ async function initEditJob() {
     event.preventDefault();
     setNotice(errorBox, "");
 
-    await updateDoc(jobRef, {
-      jobTitle: document.getElementById("job-title").value.trim(),
-      companyName: document.getElementById("company-name").value.trim(),
-      jobLocation: document.getElementById("job-location").value.trim(),
-      jobDescription: document.getElementById("job-description").value.trim(),
-      salary: document.getElementById("salary").value.trim(),
-      requirements: document.getElementById("requirements").value.trim(),
-      qualities: document.getElementById("qualities").value.trim(),
-      expectations: document.getElementById("expectations").value.trim()
+    const jobTitle = document.getElementById("job-title").value.trim();
+    const companyName = document.getElementById("company-name").value.trim();
+    const jobLocation = document.getElementById("job-location").value.trim();
+    const jobDescription = document.getElementById("job-description").value.trim();
+    const salary = document.getElementById("salary").value.trim();
+    const requirements = document.getElementById("requirements").value.trim();
+    const qualities = document.getElementById("qualities").value.trim();
+    const expectations = document.getElementById("expectations").value.trim();
+
+    const validationMessage = validateJobForm({
+      jobTitle,
+      companyName,
+      jobLocation,
+      jobDescription,
+      salary,
+      requirements,
+      qualities,
+      expectations
     });
 
-    window.location.href = "employer.html";
+    if (validationMessage) {
+      setNotice(errorBox, validationMessage);
+      return;
+    }
+
+    try {
+      setButtonLoading(submitButton, true, "Updating...");
+      await updateDoc(jobRef, {
+        jobTitle,
+        companyName,
+        jobLocation,
+        jobDescription,
+        salary,
+        requirements,
+        qualities,
+        expectations
+      });
+
+      window.location.href = "employer.html";
+    } catch (error) {
+      setNotice(errorBox, "Unable to update this job right now.");
+    } finally {
+      setButtonLoading(submitButton, false);
+    }
   });
 }

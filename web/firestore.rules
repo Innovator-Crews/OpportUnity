@@ -13,34 +13,107 @@ service cloud.firestore {
       return userDoc(uid).data.role;
     }
 
+    function isEmployer() {
+      return isSignedIn() && userRole(request.auth.uid) == "employer";
+    }
+
+    function isEmployee() {
+      return isSignedIn() && userRole(request.auth.uid) == "employee";
+    }
+
+    function isNonEmptyString(value, minSize, maxSize) {
+      return value is string && value.size() >= minSize && value.size() <= maxSize;
+    }
+
+    function hasOnlyKeys(data, allowedKeys) {
+      return data.keys().hasOnly(allowedKeys);
+    }
+
+    function isValidRole(role) {
+      return role in ["employer", "employee"];
+    }
+
+    function isEmployerForJob(jobId) {
+      return isEmployer()
+        && get(/databases/$(database)/documents/job_posts/$(jobId)).data.employerId == request.auth.uid;
+    }
+
+    function isValidUserProfile(data) {
+      return hasOnlyKeys(data, ["firstName", "lastName", "email", "role"])
+        && isNonEmptyString(data.firstName, 1, 60)
+        && isNonEmptyString(data.lastName, 1, 60)
+        && isNonEmptyString(data.email, 5, 120)
+        && isValidRole(data.role);
+    }
+
+    function isValidJobPost(data) {
+      return hasOnlyKeys(data, [
+        "employerId",
+        "jobTitle",
+        "companyName",
+        "jobLocation",
+        "jobDescription",
+        "salary",
+        "requirements",
+        "qualities",
+        "expectations",
+        "createdAt"
+      ])
+        && data.employerId == request.auth.uid
+        && isNonEmptyString(data.jobTitle, 2, 120)
+        && isNonEmptyString(data.companyName, 2, 120)
+        && isNonEmptyString(data.jobLocation, 2, 120)
+        && isNonEmptyString(data.jobDescription, 20, 2000)
+        && isNonEmptyString(data.salary, 1, 60)
+        && isNonEmptyString(data.requirements, 3, 1200)
+        && isNonEmptyString(data.qualities, 3, 1200)
+        && isNonEmptyString(data.expectations, 3, 1200)
+        && data.createdAt is timestamp;
+    }
+
+    function isValidJobApplication(data) {
+      return hasOnlyKeys(data, ["jobId", "userId", "createdAt"])
+        && data.userId == request.auth.uid
+        && isNonEmptyString(data.jobId, 1, 120)
+        && data.createdAt is timestamp;
+    }
+
     match /users/{userId} {
       allow read: if isSignedIn() && request.auth.uid == userId;
-      allow create: if isSignedIn() && request.auth.uid == userId;
-      allow update: if isSignedIn() && request.auth.uid == userId;
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && isValidUserProfile(request.resource.data);
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        && isValidUserProfile(request.resource.data);
       allow delete: if false;
     }
 
     match /job_posts/{jobId} {
       allow read: if isSignedIn();
-      allow create: if isSignedIn()
-        && userRole(request.auth.uid) == "employer"
-        && request.resource.data.employerId == request.auth.uid;
-      allow update, delete: if isSignedIn()
-        && userRole(request.auth.uid) == "employer"
-        && resource.data.employerId == request.auth.uid;
+      allow create: if isEmployer()
+        && isValidJobPost(request.resource.data);
+      allow update: if isEmployer()
+        && resource.data.employerId == request.auth.uid
+        && request.resource.data.employerId == resource.data.employerId
+        && request.resource.data.createdAt == resource.data.createdAt
+        && isValidJobPost(request.resource.data);
+      allow delete: if isEmployer() && resource.data.employerId == request.auth.uid;
     }
 
     match /job_applications/{applicationId} {
       allow read: if isSignedIn() && (
         resource.data.userId == request.auth.uid
-        || userRole(request.auth.uid) == "employer"
+        || isEmployerForJob(resource.data.jobId)
       );
-      allow create: if isSignedIn()
-        && userRole(request.auth.uid) == "employee"
-        && request.resource.data.userId == request.auth.uid;
+      allow create: if isEmployee()
+        && isValidJobApplication(request.resource.data)
+        && exists(/databases/$(database)/documents/job_posts/$(request.resource.data.jobId));
       allow update: if false;
-      allow delete: if isSignedIn()
-        && userRole(request.auth.uid) == "employer";
+      allow delete: if isSignedIn() && (
+        resource.data.userId == request.auth.uid
+        || isEmployerForJob(resource.data.jobId)
+      );
     }
   }
 }

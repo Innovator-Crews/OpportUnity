@@ -54,6 +54,23 @@
         </div>
       </div>
 
+      <div class="panel reveal">
+        <div class="filter-bar">
+          <div class="filter-group">
+            <input id="job-search" class="filter-input" type="search" placeholder="Search roles, skills, or companies">
+            <input id="job-location-filter" class="filter-input" type="search" placeholder="Filter by location">
+          </div>
+          <div class="filter-group">
+            <button id="job-filter-clear" class="btn secondary" type="button">Clear filters</button>
+            <span id="job-results-count" class="tag">0 roles</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="jobs-loading" class="panel loading-panel hidden">
+        <span class="spinner"></span>
+        <span data-loading-text>Loading roles...</span>
+      </div>
       <div id="jobseeker-empty" class="notice hidden">No job posts available at the moment.</div>
       <div id="jobseeker-jobs" class="grid-two"></div>
     </div>
